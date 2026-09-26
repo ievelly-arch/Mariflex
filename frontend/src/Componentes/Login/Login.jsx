@@ -168,7 +168,7 @@ function Login() {
               <span></span>
             </div>
 
-            <a href="#cadastro">
+            <a href="cadastro">
               Cadastre-se
             </a>
 
