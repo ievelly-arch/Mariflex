@@ -39,7 +39,6 @@ function Login() {
 
       console.log('Usuário:', data.usuario)
       console.log('Tipo:', data.tipo)
-
     } catch (error) {
       console.error('Erro ao fazer login:', error)
       alert('Não foi possível conectar ao servidor.')
@@ -47,35 +46,139 @@ function Login() {
   }
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1>Mariflex</h1>
+    <main className="login-page">
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            E-mail
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-            />
-          </label>
+      <section className="login-showcase"></section>
 
-          <label>
-            Senha
-            <input
-              type="password"
-              name="senha"
-              value={form.senha}
-              onChange={handleChange}
-            />
-          </label>
+      <section className="login-area">
 
-          <button type="submit">Entrar</button>
-        </form>
-      </div>
-    </div>
+        <a href="/" className="back-link">
+          <span>←</span>
+          Voltar para o site
+        </a>
+
+        <div className="login-content">
+
+          <div className="section-title">
+            <span></span>
+            <p>ÁREA DO CLIENTE</p>
+          </div>
+
+          <h1>Entrar</h1>
+
+          <p className="description">
+            Acesse sua conta para continuar e
+            <br />
+            aproveite todas as vantagens.
+          </p>
+
+          <form onSubmit={handleSubmit}>
+
+            <div className="input-group">
+
+              <label htmlFor="email">
+                E-mail
+              </label>
+
+              <div className="input-wrapper">
+
+                <span className="input-icon">
+                  ✉
+                </span>
+
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Digite seu e-mail"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+            </div>
+
+            <div className="input-group">
+
+              <label htmlFor="senha">
+                Senha
+              </label>
+
+              <div className="input-wrapper">
+
+                <span className="input-icon">
+                  ♙
+                </span>
+
+                <input
+                  id="senha"
+                  type="password"
+                  name="senha"
+                  placeholder="Digite sua senha"
+                  value={form.senha}
+                  onChange={handleChange}
+                  required
+                />
+
+                <span className="eye-icon">
+                  ◉
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="login-options">
+
+              <label className="remember">
+                <input
+                  type="checkbox"
+                  name="lembrar"
+                />
+
+                <span></span>
+
+                Lembrar-me
+              </label>
+
+              <a href="#recuperar">
+                Esqueceu sua senha?
+              </a>
+
+            </div>
+
+            <button type="submit" className="login-button">
+              <span>Entrar</span>
+              <strong>→</strong>
+            </button>
+
+          </form>
+
+          <div className="register">
+
+            <div className="register-line">
+              <span></span>
+
+              <p>
+                Ainda não tem uma conta?
+              </p>
+
+              <span></span>
+            </div>
+
+            <a href="#cadastro">
+              Cadastre-se
+            </a>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
   )
 }
 

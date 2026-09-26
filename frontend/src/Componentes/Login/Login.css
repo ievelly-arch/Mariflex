@@ -1,47 +1,620 @@
-.login-container {
+.login-page {
   min-height: 100vh;
+  display: grid;
+  grid-template-columns: 53% 47%;
+  background: #f8f4f1;
+}
+
+/* =========================================
+   LADO ESQUERDO
+========================================= */
+
+.login-showcase {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(77, 4, 25, 0.12),
+      rgba(77, 4, 25, 0)
+    ),
+    url('/mariflex-login-lado-esquerdo.png');
+
+  background-size: cover;
+  background-position: center;
+
+  color: white;
+}
+
+.login-showcase {
+  min-height: 100vh;
+
+  background-image: url('/mariflex-login-lado-esquerdo.png');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.showcase-content {
+  position: relative;
+  z-index: 2;
+
+  padding: 80px 9%;
+}
+
+/* LOGO */
+
+.brand {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
+  gap: 18px;
 }
 
-.login-box {
-  width: 350px;
-  padding: 30px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.brand-symbol {
+  width: 76px;
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #f7e9df;
+  border-radius: 8px;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 48px;
+  color: #f7e9df;
 }
 
-.login-box h1 {
+.brand-name strong {
+  display: block;
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 42px;
+  font-weight: 500;
+
+  letter-spacing: 7px;
+}
+
+.brand-name span {
+  display: block;
+
+  margin-top: 4px;
+
   text-align: center;
-  margin-bottom: 25px;
+
+  font-size: 15px;
+  letter-spacing: 8px;
+
+  color: #f1dcd1;
 }
 
-.login-box form {
+/* LINHA */
+
+.showcase-line {
+  width: 52px;
+  height: 3px;
+
+  margin-top: 52px;
+
+  background: #ead3c5;
+}
+
+/* FRASE */
+
+.showcase-text {
+  margin-top: 24px;
+
+  font-size: 24px;
+  line-height: 1.45;
+
+  color: #fff8f4;
+}
+
+/* PARTE INFERIOR */
+
+.showcase-bottom {
+  position: absolute;
+  z-index: 3;
+
+  left: 7%;
+  bottom: 55px;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  color: #f4ded3;
+}
+
+.showcase-bottom strong {
+  font-weight: 600;
+}
+
+.home-icon {
+  font-size: 43px;
+  line-height: 1;
+
+  color: #f0cdbd;
+}
+
+/* =========================================
+   LADO DIREITO
+========================================= */
+
+.login-area {
+  position: relative;
+
+  min-height: 100vh;
+
+  padding: 48px 9%;
+
+  background: #fbf8f5;
+
   display: flex;
   flex-direction: column;
+}
+
+/* DECORAÇÃO */
+
+.login-area::after {
+  content: '';
+
+  position: absolute;
+
+  width: 310px;
+  height: 210px;
+
+  right: -130px;
+  bottom: -125px;
+
+  border: 2px solid #d7aeb8;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+/* VOLTAR */
+
+.back-link {
+  align-self: flex-end;
+
+  color: #64152d;
+
+  text-decoration: none;
+
+  font-size: 15px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  transition: 0.2s;
+}
+
+.back-link span {
+  font-size: 25px;
+}
+
+.back-link:hover {
+  color: #8a2845;
+}
+
+/* CONTEÚDO */
+
+.login-content {
+  width: 100%;
+  max-width: 520px;
+
+  margin: auto;
+}
+
+/* TÍTULO DA ÁREA */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.section-title span {
+  width: 40px;
+  height: 3px;
+
+  background: #721832;
+}
+
+.section-title p {
+  margin: 0;
+
+  color: #721832;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  letter-spacing: 4px;
+}
+
+/* ENTRAR */
+
+.login-content h1 {
+  margin: 17px 0 10px;
+
+  color: #63152d;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: 62px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* DESCRIÇÃO */
+
+.description {
+  margin: 0 0 42px;
+
+  color: #777;
+
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* FORM */
+
+.login-content form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 25px;
+}
+
+/* CAMPOS */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.input-group label {
+  color: #481321;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.input-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 62px;
+
+  padding: 0 50px;
+
+  border: 1px solid #d6c5c7;
+  border-radius: 11px;
+
+  outline: none;
+
+  background: #fff;
+
+  color: #481321;
+
+  font-size: 16px;
+
+  transition: 0.2s;
+}
+
+.input-wrapper input::placeholder {
+  color: #999;
+}
+
+.input-wrapper input:focus {
+  border-color: #741933;
+
+  box-shadow:
+    0 0 0 3px rgba(116, 25, 51, 0.08);
+}
+
+/* ÍCONES */
+
+.input-icon {
+  position: absolute;
+
+  left: 18px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #6e2b3d;
+
+  font-size: 22px;
+
+  pointer-events: none;
+}
+
+.eye-icon {
+  position: absolute;
+
+  right: 20px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #6e2b3d;
+
+  font-size: 17px;
+
+  pointer-events: none;
+}
+
+/* OPÇÕES */
+
+.login-options {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: -5px;
+
+  font-size: 14px;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: #777;
+
+  cursor: pointer;
+}
+
+.remember input {
+  display: none;
+}
+
+.remember span {
+  width: 21px;
+  height: 21px;
+
+  border: 1px solid #aaa;
+  border-radius: 4px;
+
+  background: white;
+}
+
+.remember input:checked + span {
+  background: #6d1730;
+
+  border-color: #6d1730;
+}
+
+.login-options a {
+  color: #741933;
+
+  text-decoration: none;
+}
+
+.login-options a:hover {
+  text-decoration: underline;
+}
+
+/* BOTÃO */
+
+.login-button {
+  position: relative;
+
+  width: 100%;
+  height: 62px;
+
+  border: none;
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #64152d,
+      #781a38
+    );
+
+  color: white;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition: 0.2s;
+}
+
+.login-button::after {
+  content: '';
+
+  position: absolute;
+
+  width: 160px;
+  height: 160px;
+
+  right: -45px;
+  bottom: -110px;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
+  border-radius: 50%;
+}
+
+.login-button:hover {
+  background: #551126;
+
+  transform: translateY(-1px);
+}
+
+.login-button span {
+  margin-right: 15px;
+}
+
+.login-button strong {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+/* CADASTRO */
+
+.register {
+  margin-top: 42px;
+
+  text-align: center;
+}
+
+.register-line {
+  display: flex;
+  align-items: center;
   gap: 15px;
 }
 
-.login-box label {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.register-line span {
+  flex: 1;
+
+  height: 1px;
+
+  background: #dbcdd0;
 }
 
-.login-box input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.register-line p {
+  margin: 0;
+
+  color: #8b6871;
+
+  font-size: 13px;
+
+  white-space: nowrap;
 }
 
-.login-box button {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #333;
-  color: white;
+.register > a {
+  display: inline-block;
+
+  margin-top: 10px;
+
+  color: #64152d;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: underline;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 1000px) {
+  .login-page {
+    grid-template-columns: 45% 55%;
+  }
+
+  .brand-name strong {
+    font-size: 31px;
+    letter-spacing: 4px;
+  }
+
+  .brand-symbol {
+    width: 65px;
+    height: 65px;
+  }
+
+  .showcase-text {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 760px) {
+  .login-page {
+    display: block;
+  }
+
+  .login-showcase {
+    min-height: 300px;
+  }
+
+  .showcase-content {
+    padding: 45px 30px;
+  }
+
+  .brand-name strong {
+    font-size: 28px;
+  }
+
+  .brand-symbol {
+    width: 58px;
+    height: 58px;
+    font-size: 36px;
+  }
+
+  .showcase-text {
+    font-size: 18px;
+  }
+
+  .showcase-bottom {
+    display: none;
+  }
+
+  .login-area {
+    min-height: auto;
+    padding: 35px 25px 50px;
+  }
+
+  .login-content {
+    margin-top: 55px;
+  }
+
+  .login-content h1 {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-showcase {
+    min-height: 260px;
+  }
+
+  .brand-name strong {
+    font-size: 23px;
+    letter-spacing: 3px;
+  }
+
+  .brand-name span {
+    font-size: 10px;
+    letter-spacing: 5px;
+  }
+
+  .login-content h1 {
+    font-size: 42px;
+  }
+
+  .description {
+    font-size: 15px;
+  }
+
+  .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
