@@ -1,69 +1,69 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 generator client {
-provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
+
 datasource db {
-provider = "mysql"
-url = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
-model Cliente {
-CPF_cliente String @id @db.VarChar(15)
-nome String @db.VarChar(100)
-email String @db.VarChar(55)
-senha String @db.VarChar(255)
-telefone String @db.VarChar(20)
-endereco String @db.VarChar(100)
-pedidos Pedido[]
+
+model cliente {
+  CPF_cliente String @id @db.VarChar(15)
+  nome        String @db.VarChar(100)
+  email       String @db.VarChar(55)
+  telefone    String @db.VarChar(20)
+  endereco    String @db.VarChar(100)
 }
-model Pedido {
-idpedido Int @id @default(autoincrement())
-pagamento String @db.VarChar(5)
-valor_total Decimal @db.Decimal(10, 2)
-data DateTime @db.Date
-cliente_CPF_cliente String @db.VarChar(15)
-remetente String @db.VarChar(100)
-destinatario String @db.VarChar(100)
-cliente Cliente @relation(fields: [cliente_CPF_cliente], references: [CPF_cliente])
-itensPedido ItemPedido[]
+
+model empresa {
+  idempresa Int    @id @default(autoincrement())
+  CNPJ      String @db.VarChar(18)
+  telefone  String @db.VarChar(15)
+  email     String @db.VarChar(100)
+  endereco  String @db.VarChar(150)
 }
-model ItemPedido {
-iditempedido Int @id @default(autoincrement())
-quantidade Int
-preco Decimal @db.Decimal(10, 2)
-pedido_idpedido Int
-produto_idprodutos Int
-pedido Pedido @relation(fields: [pedido_idpedido], references: [idpedido])
-produto Produto @relation(fields: [produto_idprodutos], references: [idprodutos])
+
+model funcionario {
+  CPF_funcionario      String  @id @db.VarChar(15)
+  nome                 String  @db.VarChar(50)
+  cargo                String  @db.VarChar(50)
+  telefone_funcionario String  @db.VarChar(20)
+  email                String  @db.VarChar(100)
+  salario              Decimal @db.Decimal(10, 2)
+  empresa_idempresa    Int
+
+  @@index([empresa_idempresa], map: "Funcionario_empresa_idempresa_fkey")
 }
-model Produto {
-idprodutos Int @id @default(autoincrement())
-descricao String @db.VarChar(200)
-categoria String @db.VarChar(50)
-preco Decimal @db.Decimal(10, 2)
-empresa_idempresa Int
-empresa Empresa @relation(fields: [empresa_idempresa], references: [idempresa])
-itensPedido ItemPedido[]
+
+model itempedido {
+  iditempedido       Int     @id @default(autoincrement())
+  quantidade         Int
+  preco              Decimal @db.Decimal(10, 2)
+  pedido_idpedido    Int
+  produto_idprodutos Int
+
+  @@index([pedido_idpedido], map: "ItemPedido_pedido_idpedido_fkey")
+  @@index([produto_idprodutos], map: "ItemPedido_produto_idprodutos_fkey")
 }
-model Empresa {
-idempresa Int @id @default(autoincrement())
-CNPJ String @db.VarChar(18)
-telefone String @db.VarChar(15)
-email String @db.VarChar(100)
-endereco String @db.VarChar(150)
-produtos Produto[]
-funcionarios Funcionario[]
+
+model pedido {
+  idpedido            Int      @id @default(autoincrement())
+  pagamento           String   @db.VarChar(5)
+  valor_total         Decimal  @db.Decimal(10, 2)
+  data                DateTime @db.Date
+  cliente_CPF_cliente String   @db.VarChar(15)
+  remetente           String   @db.VarChar(100)
+  destinatario        String   @db.VarChar(100)
+
+  @@index([cliente_CPF_cliente], map: "Pedido_cliente_CPF_cliente_fkey")
 }
-model Funcionario {
-CPF_funcionario String @id @db.VarChar(15)
-nome String @db.VarChar(50)
-cargo String @db.VarChar(50)
-telefone_funcionario String @db.VarChar(20)
-email String @db.VarChar(100)
-senha String @db.VarChar(255)
-salario Decimal @db.Decimal(10, 2)
-empresa_idempresa Int
-empresa Empresa @relation(fields: [empresa_idempresa], references: [idempresa])
+
+model produto {
+  idprodutos        Int     @id @default(autoincrement())
+  descricao         String  @db.VarChar(200)
+  categoria         String  @db.VarChar(50)
+  preco             Decimal @db.Decimal(10, 2)
+  empresa_idempresa Int
+
+  @@index([empresa_idempresa], map: "Produto_empresa_idempresa_fkey")
 }
