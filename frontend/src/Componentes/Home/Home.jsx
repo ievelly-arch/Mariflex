@@ -67,7 +67,7 @@ return (
         Início  
       </a>  
 
-      <a href="#catalogo">Catálogo</a>  
+      <a href="/catalogo">Catálogo</a>  
 
       <a href="#categorias">  
         Categorias <span>⌄</span>  
@@ -94,7 +94,7 @@ return (
       </p>  
 
       <div className="hero-buttons">  
-        <a href="#catalogo" className="primary-button">  
+        <a href="/catalogo" className="primary-button">  
           Ver Catálogo <span>→</span>  
         </a>  
 
@@ -168,7 +168,7 @@ return (
     </div>  
 
     <div className="category-grid">  
-      <a href="#catalogo" className="category-card">  
+      <a href="/catalogo" className="category-card">  
         <div className="category-icon">🛋</div>  
 
         <div className="category-info">  
@@ -183,7 +183,7 @@ return (
         />  
       </a>  
 
-      <a href="#catalogo" className="category-card">  
+      <a href="/catalogo" className="category-card">  
         <div className="category-icon">🛏</div>  
 
         <div className="category-info">  
@@ -198,7 +198,7 @@ return (
         />  
       </a>  
 
-      <a href="#catalogo" className="category-card">  
+      <a href="/catalogo" className="category-card">  
         <div className="category-icon">🚪</div>  
 
         <div className="category-info">  
@@ -213,7 +213,7 @@ return (
         />  
       </a>  
 
-      <a href="#catalogo" className="category-card">  
+      <a href="/catalogo" className="category-card">  
         <div className="category-icon">🍽</div>  
 
         <div className="category-info">  
@@ -228,7 +228,7 @@ return (
         />  
       </a>  
 
-      <a href="#catalogo" className="category-card">  
+      <a href="/catalogo" className="category-card">  
         <div className="category-icon">📺</div>  
 
         <div className="category-info">  
@@ -244,7 +244,7 @@ return (
       </a>  
     </div>  
 
-    <a href="#catalogo" className="categories-button">  
+    <a href="/catalogo" className="categories-button">  
       Ver todas as categorias <span>→</span>  
     </a>  
   </section>  
@@ -306,7 +306,7 @@ return (
       </p>  
     </div>  
 
-    <a href="catalogo" className="primary-button">  
+    <a href="/catalogo" className="primary-button">  
       Ver Catálogo <span>→</span>  
     </a>  
   </section>  
