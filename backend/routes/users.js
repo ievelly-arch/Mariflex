@@ -2,6 +2,10 @@
 const express = require('express')
 const router = express.Router()
 
+router.get('/teste', (req, res) => {
+  res.json({ mensagem: 'A rota users está funcionando!' })
+})
+
 const bcrypt = require('bcryptjs')
 const { PrismaClient } = require('@prisma/client')
 
@@ -106,6 +110,195 @@ router.post('/', async function (req, res) {
 
     return res.status(500).json({
       mensagem: 'Erro ao cadastrar cliente.'
+    })
+  }
+})
+
+// CONSULTAR PERFIL E HISTÓRICO DE PEDIDOS DO CLIENTE
+
+router.get('/perfil/:cpf', async function (req, res) {
+  try {
+    const cpf = req.params.cpf
+
+    const cliente = await prisma.cliente.findUnique({
+      where: {
+        CPF_cliente: cpf
+      },
+      select: {
+        CPF_cliente: true,
+        nome: true,
+        email: true,
+        telefone: true,
+        endereco: true
+      }
+    })
+
+    if (!cliente) {
+      return res.status(404).json({
+        mensagem: 'Cliente não encontrado.'
+      })
+    }
+
+    const pedidos = await prisma.pedido.findMany({
+      where: {
+        cliente_CPF_cliente: cliente.CPF_cliente
+      },
+      orderBy: {
+        data: 'desc'
+      }
+    })
+
+    const pedidosComItens = await Promise.all(
+      pedidos.map(async (pedido) => {
+        const itens = await prisma.itempedido.findMany({
+          where: {
+            pedido_idpedido: pedido.idpedido
+          }
+        })
+
+        const idsProdutos = [
+          ...new Set(
+            itens.map(item => item.produto_idprodutos)
+          )
+        ]
+
+        const produtos = await prisma.produto.findMany({
+          where: {
+            idprodutos: {
+              in: idsProdutos
+            }
+          },
+          select: {
+            idprodutos: true,
+            nome: true,
+            descricao: true,
+            imagem: true,
+            categoria: true
+          }
+        })
+
+        const produtosPorId = new Map(
+          produtos.map(produto => [
+            produto.idprodutos,
+            produto
+          ])
+        )
+
+        return {
+          idpedido: pedido.idpedido,
+          data: pedido.data,
+          pagamento: pedido.pagamento,
+          valor_total: Number(pedido.valor_total),
+          itens: itens.map(item => ({
+            quantidade: item.quantidade,
+            preco: Number(item.preco),
+            produto:
+              produtosPorId.get(item.produto_idprodutos) || null
+          }))
+        }
+      })
+    )
+
+    return res.status(200).json({
+      cliente,
+      pedidos: pedidosComItens
+    })
+  } catch (error) {
+    console.error('Erro ao consultar perfil:', error)
+
+    return res.status(500).json({
+      mensagem: 'Não foi possível carregar o perfil do cliente.'
+    })
+  }
+})
+
+router.get('/perfil/:cpf', async function (req, res) {
+  try {
+    const cpf = req.params.cpf
+
+    const cliente = await prisma.cliente.findUnique({
+      where: {
+        CPF_cliente: cpf,
+      },
+      select: {
+        CPF_cliente: true,
+        nome: true,
+        email: true,
+        telefone: true,
+        endereco: true,
+      },
+    })
+
+    if (!cliente) {
+      return res.status(404).json({
+        mensagem: 'Cliente não encontrado.',
+      })
+    }
+
+    const pedidos = await prisma.pedido.findMany({
+      where: {
+        cliente_CPF_cliente: cliente.CPF_cliente,
+      },
+      orderBy: {
+        data: 'desc',
+      },
+    })
+
+    const pedidosComItens = await Promise.all(
+      pedidos.map(async (pedido) => {
+        const itens = await prisma.itempedido.findMany({
+          where: {
+            pedido_idpedido: pedido.idpedido,
+          },
+        })
+
+        const idsProdutos = [
+          ...new Set(itens.map((item) => item.produto_idprodutos)),
+        ]
+
+        const produtos = await prisma.produto.findMany({
+          where: {
+            idprodutos: {
+              in: idsProdutos,
+            },
+          },
+          select: {
+            idprodutos: true,
+            nome: true,
+            descricao: true,
+            imagem: true,
+            categoria: true,
+          },
+        })
+
+        const produtosPorId = new Map(
+          produtos.map((produto) => [produto.idprodutos, produto])
+        )
+
+        return {
+          idpedido: pedido.idpedido,
+          data: pedido.data,
+          pagamento: pedido.pagamento,
+          valor_total: Number(pedido.valor_total),
+          itens: itens.map((item) => ({
+            quantidade: item.quantidade,
+            preco: Number(item.preco),
+            produto:
+              produtosPorId.get(item.produto_idprodutos) || null,
+          })),
+        }
+      })
+    )
+
+    return res.status(200).json({
+      cliente,
+      pedidos: pedidosComItens,
+    })
+  } catch (error) {
+    console.error('Erro ao consultar perfil:', error)
+
+    return res.status(500).json({
+      mensagem: 'Não foi possível carregar o perfil do cliente.',
     })
   }
 })
