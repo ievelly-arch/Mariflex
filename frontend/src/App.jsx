@@ -5,6 +5,7 @@ import Cadastro from './Componentes/Cadastro/Cadastro'
 import Carrinho from './Componentes/Carrinho/Carrinho'
 import Catalogo from './Componentes/Catalogo/Catalogo'
 import Perfil from './Componentes/Perfil/perfil'
+import DetalhesProduto from './Componentes/DetalhesProduto/DetalhesProduto'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/carrinho" element={<Carrinho />} />
       <Route path="/catalogo" element={<Catalogo />} />
       <Route path="/perfil" element={<Perfil />} />
+      <Route path="/produto/:id" element={<DetalhesProduto />} />
     </Routes>
   )
 }

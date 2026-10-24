@@ -42,6 +42,13 @@ function Perfil() {
   const [carregando, setCarregando] = useState(true)
   const [mensagem, setMensagem] = useState('')
 
+
+function sairDaConta() {
+  localStorage.removeItem(CHAVE_USUARIO)
+  window.location.href = '/login'
+}
+
+
   useEffect(() => {
     async function carregarPerfil() {
       if (!usuario) {
@@ -94,11 +101,17 @@ function Perfil() {
           <span>MARIFLEX</span>
         </Link>
 
-        <nav className="perfil-nav">
-          <Link to="/">Início</Link>
-          <Link to="/catalogo">Catálogo</Link>
-          <Link to="/carrinho">Carrinho</Link>
-        </nav>
+        
+<nav className="perfil-nav">
+  <Link to="/">Início</Link>
+  <Link to="/catalogo">Catálogo</Link>
+  <Link to="/carrinho">Carrinho</Link>
+
+  <button type="button" onClick={sairDaConta}>
+    Sair da conta
+  </button>
+</nav>
+
       </header>
 
       <section className="perfil-conteudo">

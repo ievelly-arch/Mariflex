@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
@@ -20,6 +19,13 @@ router.get('/', async (req, res) => {
         preco: true,
         imagem: true,
         empresa_idempresa: true,
+        variacoes: {
+          select: {
+            idvariacao: true,
+            tipo: true,
+            valor: true,
+          },
+        },
       },
     });
 

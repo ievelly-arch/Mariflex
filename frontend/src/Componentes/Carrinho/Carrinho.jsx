@@ -223,7 +223,15 @@ function Carrinho() {
                   <div className="carrinho-item-detalhes">
                     <h3>{item.nome}</h3>
                     <p>{item.categoria}</p>
+                    {item.variacoes &&
+  Object.entries(item.variacoes).map(([tipo, valor]) => (
+    <p key={tipo}>
+      <strong>{tipo}:</strong> {valor}
+    </p>
+  ))}
                     <strong>{formatarPreco(item.preco)}</strong>
+
+
 
                     <div className="carrinho-quantidade">
                       <span>Quantidade:</span>

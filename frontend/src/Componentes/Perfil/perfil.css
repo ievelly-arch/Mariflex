@@ -414,3 +414,17 @@
     text-align: left;
   }
 }
+
+.perfil-nav button {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.perfil-nav button:hover {
+  opacity: 0.75;
+}

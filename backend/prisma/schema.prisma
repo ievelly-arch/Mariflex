@@ -68,6 +68,19 @@ model produto {
   empresa_idempresa Int
   nome              String? @db.VarChar(100)
   imagem            String? @db.VarChar(500)
-
+variacoes variacaoProduto[]
   @@index([empresa_idempresa], map: "Produto_empresa_idempresa_fkey")
+  
+}
+
+
+model variacaoProduto {
+  idvariacao         Int    @id @default(autoincrement())
+  tipo               String @db.VarChar(30)
+  valor              String @db.VarChar(100)
+  produto_idprodutos Int
+
+  produto produto @relation(fields: [produto_idprodutos], references: [idprodutos], onDelete: Cascade)
+
+  @@index([produto_idprodutos])
 }

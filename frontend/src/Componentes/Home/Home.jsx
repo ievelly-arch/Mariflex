@@ -1,6 +1,43 @@
+import { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import './Home.css'
 
 function Home() {
+  const [termoBusca, setTermoBusca] = useState('')
+const navigate = useNavigate()
+const [usuario, setUsuario] = useState(() => {
+  try {
+    return JSON.parse(localStorage.getItem('mariflexUsuario'))
+  } catch {
+    return null
+  }
+})
+
+useEffect(() => {
+  function atualizarUsuario() {
+    try {
+      setUsuario(JSON.parse(localStorage.getItem('mariflexUsuario')))
+    } catch {
+      setUsuario(null)
+    }
+  }
+
+  window.addEventListener('storage', atualizarUsuario)
+
+  return () => {
+    window.removeEventListener('storage', atualizarUsuario)
+  }
+}, [])
+
+function buscarProdutos() {
+  const termo = termoBusca.trim()
+
+  if (termo) {
+    navigate(`/catalogo?busca=${encodeURIComponent(termo)}`)
+  } else {
+    navigate('/catalogo')
+  }
+}
   return (
     <main className="home">
       {/* BARRA SUPERIOR */}
@@ -29,24 +66,34 @@ function Home() {
           </a>
 
           {/* BUSCA */}
-          <div className="search">
-            <input
-              type="text"
-              placeholder="Busque por móveis, ambientes ou categorias..."
-              aria-label="Buscar móveis"
-            />
+<div className="search">
+  <input
+    type="text"
+    placeholder="Busque por móveis, ambientes ou categorias..."
+    aria-label="Buscar móveis"
+    value={termoBusca}
+    onChange={(e) => setTermoBusca(e.target.value)}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        buscarProdutos()
+      }
+    }}
+  />
 
-            <button type="button" aria-label="Buscar">
-              🔍
-            </button>
-          </div>
+  <button type="button" aria-label="Buscar" onClick={buscarProdutos}>
+    🔍
+  </button>
+</div>
 
           {/* AÇÕES */}
           <div className="header-actions">
-            <a href="/perfil" className="header-action">
-              <span>♙</span>
-              <small>Meu perfil</small>
-            </a>
+            <Link
+  to={usuario ? '/perfil' : '/login'}
+  className="header-action"
+>
+  <span>♙</span>
+  <small>{usuario ? 'Meu perfil' : 'Entrar'}</small>
+</Link>
 
             <button type="button" className="header-action">
               <span>♡</span>

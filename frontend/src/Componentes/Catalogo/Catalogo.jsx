@@ -1,6 +1,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './Catalogo.css'
 
 const API_URL = 'http://localhost:3000/produtos'
@@ -40,10 +40,13 @@ function lerCarrinho() {
 
 function Catalogo() {
   const [produtos, setProdutos] = useState([])
-  const [carregando, setCarregando] = useState(true)
-  const [erro, setErro] = useState('')
-  const [pesquisa, setPesquisa] = useState('')
-  const [categoria, setCategoria] = useState('Todas')
+const [carregando, setCarregando] = useState(true)
+const [erro, setErro] = useState('')
+const [searchParams] = useSearchParams()
+const [pesquisa, setPesquisa] = useState(
+  () => searchParams.get('busca') || '',
+)
+const [categoria, setCategoria] = useState('Todas')
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [carrinho, setCarrinho] = useState(lerCarrinho)
 
@@ -279,13 +282,12 @@ function Catalogo() {
                       </p>
 
                       <div className="produto-acoes">
-                        <button
-                          type="button"
-                          className="produto-btn-detalhes"
-                          onClick={() => setProdutoSelecionado(produto)}
-                        >
-                          Ver detalhes
-                        </button>
+                        <Link
+  to={`/produto/${produto.id}`}
+  className="produto-btn-detalhes"
+>
+  Ver detalhes
+</Link>
 
                         <button
                           type="button"

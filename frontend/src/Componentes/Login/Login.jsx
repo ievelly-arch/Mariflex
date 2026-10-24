@@ -54,9 +54,11 @@ function Login() {
         }),
       )
 
-      alert(data.mensagem || 'Login realizado com sucesso.')
+      
+alert(data.mensagem || 'Login realizado com sucesso.')
 
-      navigate('/catalogo')
+navigate('/catalogo', { replace: true })
+      
     } catch (error) {
       console.error('Erro ao fazer login:', error)
       alert('Não foi possível conectar ao servidor. Verifique se o backend está funcionando.')
