@@ -4,19 +4,18 @@ import { Link } from 'react-router-dom'
 import './Catalogo.css'
 
 const API_URL = 'http://localhost:3000/produtos'
+const CHAVE_CARRINHO = 'mariflexCarrinho'
 
-// Imagens ilustrativas para os produtos cadastrados no banco.
-// O banco ainda não possui uma coluna de imagem.
 const imagensPorCategoria = {
-  Sofás:
+  'Sala':
     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=85',
-  Quartos:
+  'Quarto':
     'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=85',
   'Guarda-Roupas':
     'https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=900&q=85',
   'Racks e Painéis':
     'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=900&q=85',
-  'Salas de Jantar':
+  'Sala de jantar':
     'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=900&q=85',
 }
 
@@ -29,16 +28,36 @@ const formatarPreco = (preco) =>
     currency: 'BRL',
   })
 
-function Catalogo() {
+function lerCarrinho() {
+  try {
+    const dados = localStorage.getItem(CHAVE_CARRINHO)
+    const itens = dados ? JSON.parse(dados) : []
+    return Array.isArray(itens) ? itens : []
+  } catch {
+    return []
+  }
+}
 
+function Catalogo() {
   const [produtos, setProdutos] = useState([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
-
   const [pesquisa, setPesquisa] = useState('')
   const [categoria, setCategoria] = useState('Todas')
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
-  const [carrinho, setCarrinho] = useState([])
+  const [carrinho, setCarrinho] = useState(lerCarrinho)
+
+  useEffect(() => {
+    function atualizarCarrinho() {
+      setCarrinho(lerCarrinho())
+    }
+
+    window.addEventListener('storage', atualizarCarrinho)
+
+    return () => {
+      window.removeEventListener('storage', atualizarCarrinho)
+    }
+  }, [])
 
   async function carregarProdutos() {
     setCarregando(true)
@@ -58,21 +77,27 @@ function Catalogo() {
       }
 
       setProdutos(
-        dados.map((produto) => ({
-          id: produto.idprodutos,
-          nome: produto.descricao,
-          categoria: produto.categoria,
-          preco: Number(produto.preco),
-          descricao: produto.descricao,
-          imagem:
-  produto.imagem ||
-  imagensPorCategoria[produto.categoria] ||
-  imagemPadrao,
-        }))
+        dados.map((produto) => {
+          const nome = produto.nome || produto.descricao || 'Produto'
+
+          return {
+            id: produto.idprodutos,
+            nome,
+            categoria: produto.categoria || 'Outros',
+            preco: Number(produto.preco),
+            descricao: produto.descricao || nome,
+            imagem:
+              produto.imagem ||
+              imagensPorCategoria[produto.categoria] ||
+              imagemPadrao,
+          }
+        }),
       )
     } catch (error) {
       console.error('Erro ao carregar catálogo:', error)
-      setErro('Não é possível carregar o catálogo. Verifique se o backend está funcionando.')
+      setErro(
+        'Não é possível carregar o catálogo. Verifique se o backend está funcionando.',
+      )
     } finally {
       setCarregando(false)
     }
@@ -83,11 +108,8 @@ function Catalogo() {
   }, [])
 
   const categorias = useMemo(
-    () => [
-      'Todas',
-      ...new Set(produtos.map((produto) => produto.categoria)),
-    ],
-    [produtos]
+    () => ['Todas', ...new Set(produtos.map((produto) => produto.categoria))],
+    [produtos],
   )
 
   const produtosFiltrados = useMemo(() => {
@@ -106,8 +128,42 @@ function Catalogo() {
   }, [produtos, pesquisa, categoria])
 
   function adicionarAoCarrinho(produto) {
-    setCarrinho((itens) => [...itens, produto])
+    const itensAtuais = lerCarrinho()
+    const itemExistente = itensAtuais.find(
+      (item) => String(item.id) === String(produto.id),
+    )
+
+    let novosItens
+
+    if (itemExistente) {
+      novosItens = itensAtuais.map((item) =>
+        String(item.id) === String(produto.id)
+          ? { ...item, quantidade: (Number(item.quantidade) || 1) + 1 }
+          : item,
+      )
+    } else {
+      novosItens = [
+        ...itensAtuais,
+        {
+          id: produto.id,
+          nome: produto.nome,
+          categoria: produto.categoria,
+          preco: produto.preco,
+          imagem: produto.imagem,
+          quantidade: 1,
+        },
+      ]
+    }
+
+    localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(novosItens))
+    setCarrinho(novosItens)
+    setProdutoSelecionado(null)
   }
+
+  const quantidadeCarrinho = carrinho.reduce(
+    (total, item) => total + (Number(item.quantidade) || 1),
+    0,
+  )
 
   return (
     <main className="catalogo-page">
@@ -123,10 +179,10 @@ function Catalogo() {
           <Link to="/login">Entrar</Link>
         </nav>
 
-        <div className="catalogo-carrinho" aria-live="polite">
+        <Link to="/carrinho" className="catalogo-carrinho" aria-live="polite">
           <span aria-hidden="true">🛒</span>
-          Carrinho ({carrinho.length})
-        </div>
+          Carrinho ({quantidadeCarrinho})
+        </Link>
       </header>
 
       <section className="catalogo-banner">
@@ -290,6 +346,10 @@ function Catalogo() {
             <img
               src={produtoSelecionado.imagem}
               alt={produtoSelecionado.nome}
+              onError={(evento) => {
+                evento.currentTarget.onerror = null
+                evento.currentTarget.src = imagemPadrao
+              }}
             />
 
             <div className="produto-modal-info">
