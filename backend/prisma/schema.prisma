@@ -38,15 +38,21 @@ produto_idprodutos Int
 pedido Pedido @relation(fields: [pedido_idpedido], references: [idpedido])
 produto Produto @relation(fields: [produto_idprodutos], references: [idprodutos])
 }
+
+
 model Produto {
-idprodutos Int @id @default(autoincrement())
-descricao String @db.VarChar(200)
-categoria String @db.VarChar(50)
-preco Decimal @db.Decimal(10, 2)
-empresa_idempresa Int
-empresa Empresa @relation(fields: [empresa_idempresa], references: [idempresa])
-itensPedido ItemPedido[]
+  idprodutos       Int          @id @default(autoincrement())
+  nome String? @db.VarChar(100)
+  descricao        String       @db.VarChar(200)
+  imagem String? @db.VarChar(500)
+  categoria        String       @db.VarChar(50)
+  preco            Decimal      @db.Decimal(10, 2)
+  empresa_idempresa Int
+
+  empresa          Empresa      @relation(fields: [empresa_idempresa], references: [idempresa])
+  itensPedido      ItemPedido[]
 }
+
 model Empresa {
 idempresa Int @id @default(autoincrement())
 CNPJ String @db.VarChar(18)

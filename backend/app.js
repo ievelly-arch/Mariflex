@@ -5,6 +5,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var produtosRouter = require('./routes/produtos');
 
 var app = express();
 
@@ -12,16 +13,34 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // CORS
+
+ // CORS
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  const origensPermitidas = [
+    'http://localhost:5173',
+    'http://localhost:5175',
+  ];
+
+  const origem = req.headers.origin;
+
+  if (origensPermitidas.includes(origem)) {
+    res.header('Access-Control-Allow-Origin', origem);
+  }
+
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
+
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
+
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
+
   next();
 });
 app.set('view engine', 'pug');
@@ -30,5 +49,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/produtos', produtosRouter);
 
 module.exports = app;
