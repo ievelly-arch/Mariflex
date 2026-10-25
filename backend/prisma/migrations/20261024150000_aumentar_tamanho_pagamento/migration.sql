@@ -1,2 +1,3 @@
 ALTER TABLE `Pedido`
 MODIFY COLUMN `pagamento` VARCHAR(20) NOT NULL;
+

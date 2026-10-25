@@ -8,20 +8,23 @@ datasource db {
 }
 
 model cliente {
-  CPF_cliente String @id @db.VarChar(15)
-  nome        String @db.VarChar(100)
-  email       String @db.VarChar(55)
-  telefone    String @db.VarChar(20)
-  endereco    String @db.VarChar(100)
-  senha       String @db.VarChar(255)
+  CPF_cliente String   @id @db.VarChar(15)
+  nome        String   @db.VarChar(100)
+  email       String   @db.VarChar(55)
+  telefone    String   @db.VarChar(20)
+  endereco    String   @db.VarChar(100)
+  senha       String   @db.VarChar(255)
+  pedido      pedido[]
 }
 
 model empresa {
-  idempresa Int    @id @default(autoincrement())
-  CNPJ      String @db.VarChar(18)
-  telefone  String @db.VarChar(15)
-  email     String @db.VarChar(100)
-  endereco  String @db.VarChar(150)
+  idempresa   Int           @id @default(autoincrement())
+  CNPJ        String        @db.VarChar(18)
+  telefone    String        @db.VarChar(15)
+  email       String        @db.VarChar(100)
+  endereco    String        @db.VarChar(150)
+  funcionario funcionario[]
+  produto     produto[]
 }
 
 model funcionario {
@@ -33,6 +36,7 @@ model funcionario {
   salario              Decimal @db.Decimal(10, 2)
   empresa_idempresa    Int
   senha                String  @db.VarChar(255)
+  empresa              empresa @relation(fields: [empresa_idempresa], references: [idempresa], map: "Funcionario_empresa_idempresa_fkey")
 
   @@index([empresa_idempresa], map: "Funcionario_empresa_idempresa_fkey")
 }
@@ -43,44 +47,48 @@ model itempedido {
   preco              Decimal @db.Decimal(10, 2)
   pedido_idpedido    Int
   produto_idprodutos Int
+  pedido             pedido  @relation(fields: [pedido_idpedido], references: [idpedido], map: "ItemPedido_pedido_idpedido_fkey")
+  produto            produto @relation(fields: [produto_idprodutos], references: [idprodutos], map: "ItemPedido_produto_idprodutos_fkey")
 
   @@index([pedido_idpedido], map: "ItemPedido_pedido_idpedido_fkey")
   @@index([produto_idprodutos], map: "ItemPedido_produto_idprodutos_fkey")
 }
 
 model pedido {
-  idpedido            Int      @id @default(autoincrement())
-  pagamento           String   @db.VarChar(20)
-  valor_total         Decimal  @db.Decimal(10, 2)
-  data                DateTime @db.Date
-  cliente_CPF_cliente String   @db.VarChar(15)
-  remetente           String   @db.VarChar(100)
-  destinatario        String   @db.VarChar(100)
+  idpedido            Int          @id @default(autoincrement())
+  pagamento           String       @db.VarChar(20)
+  valor_total         Decimal      @db.Decimal(10, 2)
+  data                DateTime     @db.Date
+  cliente_CPF_cliente String       @db.VarChar(15)
+  remetente           String       @db.VarChar(100)
+  destinatario        String       @db.VarChar(100)
+  itempedido          itempedido[]
+  cliente             cliente      @relation(fields: [cliente_CPF_cliente], references: [CPF_cliente], map: "Pedido_cliente_CPF_cliente_fkey")
 
   @@index([cliente_CPF_cliente], map: "Pedido_cliente_CPF_cliente_fkey")
 }
 
 model produto {
-  idprodutos        Int     @id @default(autoincrement())
-  descricao         String  @db.VarChar(200)
-  categoria         String  @db.VarChar(50)
-  preco             Decimal @db.Decimal(10, 2)
+  idprodutos        Int               @id @default(autoincrement())
+  descricao         String            @db.VarChar(200)
+  categoria         String            @db.VarChar(50)
+  preco             Decimal           @db.Decimal(10, 2)
   empresa_idempresa Int
-  nome              String? @db.VarChar(100)
-  imagem            String? @db.VarChar(500)
-variacoes variacaoProduto[]
+  imagem            String?           @db.VarChar(255)
+  nome              String            @db.VarChar(100)
+  itempedido        itempedido[]
+  empresa           empresa           @relation(fields: [empresa_idempresa], references: [idempresa], map: "Produto_empresa_idempresa_fkey")
+  variacaoproduto   variacaoproduto[]
+
   @@index([empresa_idempresa], map: "Produto_empresa_idempresa_fkey")
-  
 }
 
-
-model variacaoProduto {
-  idvariacao         Int    @id @default(autoincrement())
-  tipo               String @db.VarChar(30)
-  valor              String @db.VarChar(100)
+model variacaoproduto {
+  idvariacao         Int     @id @default(autoincrement())
+  tipo               String  @db.VarChar(30)
+  valor              String  @db.VarChar(100)
   produto_idprodutos Int
+  produto            produto @relation(fields: [produto_idprodutos], references: [idprodutos], onDelete: Cascade, map: "fk_variacao_produto")
 
-  produto produto @relation(fields: [produto_idprodutos], references: [idprodutos], onDelete: Cascade)
-
-  @@index([produto_idprodutos])
+  @@index([produto_idprodutos], map: "produto_idprodutos")
 }
