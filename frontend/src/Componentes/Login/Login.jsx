@@ -57,7 +57,7 @@ function Login() {
       
 alert(data.mensagem || 'Login realizado com sucesso.')
 
-navigate('/catalogo', { replace: true })
+navigate('/', { replace: true })
       
     } catch (error) {
       console.error('Erro ao fazer login:', error)

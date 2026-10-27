@@ -6,16 +6,42 @@ import Carrinho from './Componentes/Carrinho/Carrinho'
 import Catalogo from './Componentes/Catalogo/Catalogo'
 import Perfil from './Componentes/Perfil/perfil'
 import DetalhesProduto from './Componentes/DetalhesProduto/DetalhesProduto'
+import RotaProtegida from './Componentes/RotaProtegida/RotaProtegida'
+import RotaPublica from './Componentes/RotaPublica/RotaPublica'
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/cadastro" element={<Cadastro />} />
+     
+<Route
+  path="/login"
+  element={
+    <RotaPublica>
+      <Login />
+    </RotaPublica>
+  }
+/>
+
+<Route
+  path="/cadastro"
+  element={
+    <RotaPublica>
+      <Cadastro />
+    </RotaPublica>
+  }
+/>
+
       <Route path="/carrinho" element={<Carrinho />} />
       <Route path="/catalogo" element={<Catalogo />} />
-      <Route path="/perfil" element={<Perfil />} />
+     <Route
+  path="/perfil"
+  element={
+    <RotaProtegida tipoPermitido="cliente">
+      <Perfil />
+    </RotaProtegida>
+  }
+/>
       <Route path="/produto/:id" element={<DetalhesProduto />} />
     </Routes>
   )
