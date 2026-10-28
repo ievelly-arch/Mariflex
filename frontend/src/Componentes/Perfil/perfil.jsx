@@ -66,9 +66,16 @@ function sairDaConta() {
       }
 
       try {
-        const resposta = await fetch(
-          `${API_URL}/users/perfil/${encodeURIComponent(usuario.cpf)}`
-        )
+        
+const resposta = await fetch(
+  `${API_URL}/users/perfil/${encodeURIComponent(usuario.cpf)}`,
+  {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${usuario.token}`,
+    },
+  }
+)
 
         const dados = await resposta.json()
 

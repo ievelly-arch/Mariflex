@@ -2,14 +2,16 @@
 const express = require('express')
 const router = express.Router()
 
+const bcrypt = require('bcryptjs')
+const { PrismaClient } = require('@prisma/client')
+const jwt = require('jsonwebtoken')
+const autenticacao = require('../middleware/autenticacao')
+
+const prisma = new PrismaClient()
+
 router.get('/teste', (req, res) => {
   res.json({ mensagem: 'A rota users está funcionando!' })
 })
-
-const bcrypt = require('bcryptjs')
-const { PrismaClient } = require('@prisma/client')
-
-const prisma = new PrismaClient()
 
 // LOGIN DE CLIENTE OU FUNCIONÁRIO
 router.post('/login', async function (req, res) {
@@ -50,9 +52,34 @@ router.post('/login', async function (req, res) {
       })
     }
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET não foi configurado.')
+
+      return res.status(500).json({
+        mensagem: 'Erro de configuração do servidor.'
+      })
+    }
+
+    const cpfUsuario =
+      tipo === 'cliente'
+        ? usuario.CPF_cliente
+        : usuario.CPF_funcionario
+
+    const token = jwt.sign(
+      {
+        tipo: tipo,
+        cpf: cpfUsuario
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '2h'
+      }
+    )
+
     return res.status(200).json({
       mensagem: 'Login realizado com sucesso.',
       tipo: tipo,
+      token: token,
       usuario: {
         nome: usuario.nome,
         email: usuario.email,
@@ -115,9 +142,20 @@ router.post('/', async function (req, res) {
 })
 
 // CONSULTAR PERFIL E HISTÓRICO DE PEDIDOS DO CLIENTE
-
-router.get('/perfil/:cpf', async function (req, res) {
+router.get('/perfil/:cpf', autenticacao, async function (req, res) {
   try {
+    if (req.usuario.tipo !== 'cliente') {
+      return res.status(403).json({
+        mensagem: 'Apenas clientes podem acessar este perfil.'
+      })
+    }
+
+    if (req.usuario.cpf !== req.params.cpf) {
+      return res.status(403).json({
+        mensagem: 'Você não tem permissão para acessar este perfil.'
+      })
+    }
+
     const cpf = req.params.cpf
 
     const cliente = await prisma.cliente.findUnique({
@@ -208,97 +246,6 @@ router.get('/perfil/:cpf', async function (req, res) {
 
     return res.status(500).json({
       mensagem: 'Não foi possível carregar o perfil do cliente.'
-    })
-  }
-})
-
-router.get('/perfil/:cpf', async function (req, res) {
-  try {
-    const cpf = req.params.cpf
-
-    const cliente = await prisma.cliente.findUnique({
-      where: {
-        CPF_cliente: cpf,
-      },
-      select: {
-        CPF_cliente: true,
-        nome: true,
-        email: true,
-        telefone: true,
-        endereco: true,
-      },
-    })
-
-    if (!cliente) {
-      return res.status(404).json({
-        mensagem: 'Cliente não encontrado.',
-      })
-    }
-
-    const pedidos = await prisma.pedido.findMany({
-      where: {
-        cliente_CPF_cliente: cliente.CPF_cliente,
-      },
-      orderBy: {
-        data: 'desc',
-      },
-    })
-
-    const pedidosComItens = await Promise.all(
-      pedidos.map(async (pedido) => {
-        const itens = await prisma.itempedido.findMany({
-          where: {
-            pedido_idpedido: pedido.idpedido,
-          },
-        })
-
-        const idsProdutos = [
-          ...new Set(itens.map((item) => item.produto_idprodutos)),
-        ]
-
-        const produtos = await prisma.produto.findMany({
-          where: {
-            idprodutos: {
-              in: idsProdutos,
-            },
-          },
-          select: {
-            idprodutos: true,
-            nome: true,
-            descricao: true,
-            imagem: true,
-            categoria: true,
-          },
-        })
-
-        const produtosPorId = new Map(
-          produtos.map((produto) => [produto.idprodutos, produto])
-        )
-
-        return {
-          idpedido: pedido.idpedido,
-          data: pedido.data,
-          pagamento: pedido.pagamento,
-          valor_total: Number(pedido.valor_total),
-          itens: itens.map((item) => ({
-            quantidade: item.quantidade,
-            preco: Number(item.preco),
-            produto:
-              produtosPorId.get(item.produto_idprodutos) || null,
-          })),
-        }
-      })
-    )
-
-    return res.status(200).json({
-      cliente,
-      pedidos: pedidosComItens,
-    })
-  } catch (error) {
-    console.error('Erro ao consultar perfil:', error)
-
-    return res.status(500).json({
-      mensagem: 'Não foi possível carregar o perfil do cliente.',
     })
   }
 })

@@ -1,13 +1,21 @@
+
 const express = require('express')
 const router = express.Router()
 const { PrismaClient } = require('@prisma/client')
+const autenticacao = require('../middleware/autenticacao')
 
 const prisma = new PrismaClient()
 
-router.post('/', async (req, res) => {
+router.post('/', autenticacao, async (req, res) => {
   try {
+    // Somente clientes autenticados podem realizar pedidos.
+    if (req.usuario.tipo !== 'cliente') {
+      return res.status(403).json({
+        mensagem: 'Somente clientes podem realizar pedidos.',
+      })
+    }
+
     const {
-      clienteCPF,
       pagamento,
       remetente,
       destinatario,
@@ -15,7 +23,6 @@ router.post('/', async (req, res) => {
     } = req.body
 
     if (
-      !clienteCPF ||
       typeof remetente !== 'string' ||
       !remetente.trim() ||
       typeof destinatario !== 'string' ||
@@ -58,9 +65,10 @@ router.post('/', async (req, res) => {
       })
     }
 
+    // O CPF vem do token validado, não do corpo da requisição.
     const cliente = await prisma.cliente.findUnique({
       where: {
-        CPF_cliente: String(clienteCPF),
+        CPF_cliente: req.usuario.cpf,
       },
       select: {
         CPF_cliente: true,
@@ -73,6 +81,7 @@ router.post('/', async (req, res) => {
       })
     }
 
+    // Agrupa itens repetidos e soma suas quantidades.
     const quantidadesPorProduto = new Map()
 
     for (const item of itens) {
@@ -87,6 +96,7 @@ router.post('/', async (req, res) => {
 
     const idsProdutos = [...quantidadesPorProduto.keys()]
 
+    // Busca os preços reais no banco.
     const produtos = await prisma.produto.findMany({
       where: {
         idprodutos: {
@@ -123,6 +133,7 @@ router.post('/', async (req, res) => {
       0
     )
 
+    // Cria o pedido e seus itens na mesma transação.
     const pedido = await prisma.$transaction(async (tx) => {
       const novoPedido = await tx.pedido.create({
         data: {

@@ -1,43 +1,52 @@
+
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './Home.css'
 
 function Home() {
   const [termoBusca, setTermoBusca] = useState('')
-const navigate = useNavigate()
-const [usuario, setUsuario] = useState(() => {
-  try {
-    return JSON.parse(localStorage.getItem('mariflexUsuario'))
-  } catch {
-    return null
-  }
-})
+  const navigate = useNavigate()
 
-useEffect(() => {
-  function atualizarUsuario() {
+  const [usuario, setUsuario] = useState(() => {
     try {
-      setUsuario(JSON.parse(localStorage.getItem('mariflexUsuario')))
+      return JSON.parse(localStorage.getItem('mariflexUsuario'))
     } catch {
-      setUsuario(null)
+      return null
+    }
+  })
+
+  useEffect(() => {
+    function atualizarUsuario() {
+      try {
+        setUsuario(JSON.parse(localStorage.getItem('mariflexUsuario')))
+      } catch {
+        setUsuario(null)
+      }
+    }
+
+    window.addEventListener('storage', atualizarUsuario)
+
+    return () => {
+      window.removeEventListener('storage', atualizarUsuario)
+    }
+  }, [])
+
+  function buscarProdutos() {
+    const termo = termoBusca.trim()
+
+    if (termo) {
+      navigate(`/catalogo?busca=${encodeURIComponent(termo)}`)
+    } else {
+      navigate('/catalogo')
     }
   }
 
-  window.addEventListener('storage', atualizarUsuario)
-
-  return () => {
-    window.removeEventListener('storage', atualizarUsuario)
+  function sair() {
+    localStorage.removeItem('mariflexUsuario')
+    setUsuario(null)
+    navigate('/', { replace: true })
   }
-}, [])
 
-function buscarProdutos() {
-  const termo = termoBusca.trim()
-
-  if (termo) {
-    navigate(`/catalogo?busca=${encodeURIComponent(termo)}`)
-  } else {
-    navigate('/catalogo')
-  }
-}
   return (
     <main className="home">
       {/* BARRA SUPERIOR */}
@@ -56,65 +65,91 @@ function buscarProdutos() {
       <header className="header">
         <div className="header-main">
           {/* LOGO */}
-          <a href="/" className="logo">
+          <Link to="/" className="logo">
             <div className="logo-symbol">M</div>
 
             <div className="logo-text">
               <strong>MARIFLEX</strong>
               <span>MÓVEIS</span>
             </div>
-          </a>
+          </Link>
 
           {/* BUSCA */}
-<div className="search">
-  <input
-    type="text"
-    placeholder="Busque por móveis, ambientes ou categorias..."
-    aria-label="Buscar móveis"
-    value={termoBusca}
-    onChange={(e) => setTermoBusca(e.target.value)}
-    onKeyDown={(e) => {
-      if (e.key === 'Enter') {
-        buscarProdutos()
-      }
-    }}
-  />
+          <div className="search">
+            <input
+              type="text"
+              placeholder="Busque por móveis, ambientes ou categorias..."
+              aria-label="Buscar móveis"
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  buscarProdutos()
+                }
+              }}
+            />
 
-  <button type="button" aria-label="Buscar" onClick={buscarProdutos}>
-    🔍
-  </button>
-</div>
+            <button
+              type="button"
+              aria-label="Buscar"
+              onClick={buscarProdutos}
+            >
+              🔍
+            </button>
+          </div>
 
           {/* AÇÕES */}
           <div className="header-actions">
-            <Link
-  to={usuario ? '/perfil' : '/login'}
-  className="header-action"
->
-  <span>♙</span>
-  <small>{usuario ? 'Meu perfil' : 'Entrar'}</small>
-</Link>
+            {usuario ? (
+              <>
+                <Link
+                  to={usuario.tipo === 'cliente' ? '/perfil' : '/'}
+                  className="header-action"
+                >
+                  <span>♙</span>
+                  <small>
+                    {usuario.tipo === 'funcionario'
+                      ? 'Área funcionário'
+                      : 'Meu perfil'}
+                  </small>
+                </Link>
+
+                <button
+                  type="button"
+                  className="header-action"
+                  onClick={sair}
+                >
+                  <span>↪</span>
+                  <small>Sair</small>
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="header-action">
+                <span>♙</span>
+                <small>Entrar</small>
+              </Link>
+            )}
 
             <button type="button" className="header-action">
               <span>♡</span>
               <small>Favoritos</small>
             </button>
 
-            <a href="/carrinho" className="header-action cart">
+            <Link to="/carrinho" className="header-action cart">
               <span>🛒</span>
               <b>0</b>
               <small>Carrinho</small>
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* MENU */}
         <nav className="navigation">
-          <a href="/" className="active">
+          <Link to="/" className="active">
             Início
-          </a>
+          </Link>
 
-          <a href="/catalogo">Catálogo</a>
+          <Link to="/catalogo">Catálogo</Link>
 
           <a href="#categorias">
             Categorias <span>⌄</span>
@@ -141,9 +176,9 @@ function buscarProdutos() {
           </p>
 
           <div className="hero-buttons">
-            <a href="/catalogo" className="primary-button">
+            <Link to="/catalogo" className="primary-button">
               Ver Catálogo <span>→</span>
-            </a>
+            </Link>
 
             <a href="#sobre" className="secondary-button">
               Saiba mais sobre nós
@@ -262,25 +297,24 @@ function buscarProdutos() {
               loading="lazy"
             />
           </a>
-<a href="/catalogo" className="category-card">
-  <div className="category-icon">📺</div>
 
-  <div className="category-info">
-    <h3>Racks e Painéis</h3>
-    <span>Ver produtos →</span>
-  </div>
-
-  <img
-    src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=700&q=80"
-    alt="Painel para televisão na sala"
-    loading="lazy"
-  />
-</a>
+          <a href="/catalogo" className="category-card">
+            <div className="category-icon">📺</div>
+            <div className="category-info">
+              <h3>Racks e Painéis</h3>
+              <span>Ver produtos →</span>
+            </div>
+            <img
+              src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=700&q=80"
+              alt="Painel para televisão na sala"
+              loading="lazy"
+            />
+          </a>
         </div>
 
-        <a href="/catalogo" className="categories-button">
+        <Link to="/catalogo" className="categories-button">
           Ver todas as categorias <span>→</span>
-        </a>
+        </Link>
       </section>
 
       {/* SOBRE */}
@@ -324,9 +358,9 @@ function buscarProdutos() {
           </p>
         </div>
 
-        <a href="/catalogo" className="primary-button">
+        <Link to="/catalogo" className="primary-button">
           Ver Catálogo <span>→</span>
-        </a>
+        </Link>
       </section>
 
       {/* RODAPÉ */}

@@ -32,7 +32,14 @@ function App() {
   }
 />
 
-      <Route path="/carrinho" element={<Carrinho />} />
+      <Route
+  path="/carrinho"
+  element={
+    <RotaProtegida tipoPermitido="cliente">
+      <Carrinho />
+    </RotaProtegida>
+  }
+/>
       <Route path="/catalogo" element={<Catalogo />} />
      <Route
   path="/perfil"

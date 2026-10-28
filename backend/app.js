@@ -1,4 +1,6 @@
 
+require('dotenv').config()
+
 var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
@@ -33,10 +35,9 @@ app.use((req, res, next) => {
   )
 
   res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  )
-
+  'Access-Control-Allow-Headers',
+  'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+)
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200)
   }

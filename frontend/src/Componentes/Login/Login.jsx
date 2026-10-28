@@ -42,8 +42,12 @@ function Login() {
         return
       }
 
-      // Guarda somente os dados necessários para identificar a conta
-      // durante a navegação no projeto.
+      if (!data.token) {
+        alert('O servidor não retornou o token de autenticação.')
+        return
+      }
+
+      // Guarda o token e os dados necessários para identificar a conta.
       localStorage.setItem(
         'mariflexUsuario',
         JSON.stringify({
@@ -51,17 +55,18 @@ function Login() {
           nome: data.usuario.nome,
           email: data.usuario.email,
           cpf: data.usuario.cpf || null,
+          token: data.token,
         }),
       )
 
-      
-alert(data.mensagem || 'Login realizado com sucesso.')
+      alert(data.mensagem || 'Login realizado com sucesso.')
 
-navigate('/', { replace: true })
-      
+      navigate('/', { replace: true })
     } catch (error) {
       console.error('Erro ao fazer login:', error)
-      alert('Não foi possível conectar ao servidor. Verifique se o backend está funcionando.')
+      alert(
+        'Não foi possível conectar ao servidor. Verifique se o backend está funcionando.',
+      )
     } finally {
       setCarregando(false)
     }

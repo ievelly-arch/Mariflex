@@ -129,17 +129,17 @@ function Carrinho() {
 
     try {
       const resposta = await fetch(`${API_URL}/pedidos`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${usuario.token}`,
+  },
         body: JSON.stringify({
-          clienteCPF: usuario.cpf,
-          pagamento,
-          remetente: remetente.trim(),
-          destinatario: destinatario.trim(),
-          itens: itensPedido,
-        }),
+  pagamento,
+  remetente: remetente.trim(),
+  destinatario: destinatario.trim(),
+  itens: itensPedido,
+}),
       })
 
       const dados = await resposta.json().catch(() => ({}))
