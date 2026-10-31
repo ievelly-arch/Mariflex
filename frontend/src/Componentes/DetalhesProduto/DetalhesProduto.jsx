@@ -48,10 +48,14 @@ function DetalhesProduto() {
         }
 
         const dados = await resposta.json()
+        console.log('Resposta da API:', dados)
 
         const encontrado = dados.find(
           (item) => String(item.idprodutos) === String(id),
+          
         )
+        console.log('Produto encontrado:', encontrado),
+console.log('Variações recebidas:', encontrado?.variacaoproduto)
 
         if (!encontrado) {
           setErro('Produto não encontrado.')
@@ -71,8 +75,8 @@ function DetalhesProduto() {
             encontrado.imagem ||
             imagensPorCategoria[categoria] ||
             imagemPadrao,
-          variacoes: Array.isArray(encontrado.variacoes)
-            ? encontrado.variacoes
+          variacoes: Array.isArray(encontrado.variacaoproduto)
+            ? encontrado.variacaoproduto
             : [],
         })
       } catch {
