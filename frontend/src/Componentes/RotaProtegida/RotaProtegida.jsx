@@ -11,12 +11,12 @@ function RotaProtegida({ children, tipoPermitido }) {
     usuario = null
   }
 
-  // Sem sessão: encaminha para o login.
-  if (!usuario) {
+  // Verifica se existe uma sessão com token
+  if (!usuario || !usuario.token || !usuario.tipo) {
     return <Navigate to="/login" replace />
   }
 
-  // Com sessão, mas sem permissão: volta para a Home.
+  // Verifica se o usuário possui o tipo permitido
   if (tipoPermitido && usuario.tipo !== tipoPermitido) {
     return <Navigate to="/" replace />
   }

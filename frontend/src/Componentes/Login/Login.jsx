@@ -61,7 +61,11 @@ function Login() {
 
       alert(data.mensagem || 'Login realizado com sucesso.')
 
-      navigate('/', { replace: true })
+      if (data.tipo === 'funcionario') {
+  navigate('/funcionario', { replace: true })
+} else {
+  navigate('/', { replace: true })
+}
     } catch (error) {
       console.error('Erro ao fazer login:', error)
       alert(

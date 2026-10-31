@@ -103,7 +103,7 @@ function Home() {
             {usuario ? (
               <>
                 <Link
-                  to={usuario.tipo === 'cliente' ? '/perfil' : '/'}
+                  to={usuario.tipo === 'cliente' ? '/perfil' : '/funcionario'}
                   className="header-action"
                 >
                   <span>♙</span>

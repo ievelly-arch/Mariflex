@@ -11,7 +11,8 @@ function RotaPublica({ children }) {
     usuario = null
   }
 
-  if (usuario) {
+  // Se já estiver autenticado, redireciona para a Home
+  if (usuario && usuario.token && usuario.tipo) {
     return <Navigate to="/" replace />
   }
 
