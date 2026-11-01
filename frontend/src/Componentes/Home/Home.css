@@ -7,6 +7,9 @@
   --mariflex-text: #292323;
   --mariflex-muted: #716969;
   --mariflex-border: #E8E3E0;
+  --mariflex-champagne: #F3DDCE;
+  --mariflex-champagne-light: #FFF8F3;
+  --mariflex-champagne-line: #E8C6AE;
 }
 
 * {
@@ -22,7 +25,7 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   color: var(--mariflex-text);
-  background: var(--mariflex-background);
+  background: #FFFFFF;
 }
 
 button,
@@ -43,7 +46,7 @@ button {
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background: var(--mariflex-background);
+  background: #FFFFFF;
 }
 
 /* BARRA SUPERIOR */
@@ -92,46 +95,29 @@ button {
 
 .logo {
   width: fit-content;
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.logo-symbol {
-  width: 55px;
-  height: 55px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--mariflex-primary);
-  color: var(--mariflex-primary);
-  font-family: Georgia, serif;
-  font-size: 42px;
-  font-weight: bold;
+.logo-symbol-image {
+  width: 65px;
+  height: 75px;
+  display: block;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.logo-wordmark-image {
+  width: 142px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
-.logo-text strong {
-  color: var(--mariflex-primary);
-  font-family: Georgia, serif;
-  font-size: 24px;
-  font-weight: 500;
-  letter-spacing: 3px;
-}
-
-.logo-text span {
-  color: var(--mariflex-primary);
-  text-align: center;
-  font-size: 10px;
-  letter-spacing: 5px;
-}
-
-/* BUSCA */
+/* PESQUISA */
 
 .search {
   height: 46px;
@@ -159,19 +145,21 @@ button {
 }
 
 .search input::placeholder {
-  color: #a49a91;
+  color: #A49A91;
 }
 
 .search button {
   width: 48px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   background: transparent;
   color: var(--mariflex-primary);
-  font-size: 19px;
 }
 
-/* PERFIL, FAVORITOS E CARRINHO */
+/* ÍCONES */
 
 .header-actions {
   display: flex;
@@ -194,18 +182,71 @@ button {
   color: var(--mariflex-text);
 }
 
-.header-action > span {
-  color: var(--mariflex-primary);
-  font-size: 25px;
-  line-height: 1.1;
-}
-
 .header-action small {
   font-size: 12px;
 }
 
 .header-action:hover {
   color: var(--mariflex-primary);
+}
+
+.header-icon {
+  width: 25px;
+  height: 25px;
+  display: block;
+  flex: 0 0 auto;
+  color: var(--mariflex-primary);
+}
+
+/* PESQUISA: CONTORNO FINO */
+
+.search-icon {
+  fill: none;
+  stroke: var(--mariflex-primary);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* PERFIL: PREENCHIDO */
+
+.profile-icon circle,
+.profile-icon path {
+  fill: var(--mariflex-primary);
+  stroke: none;
+}
+
+/* SAIR: CONTORNO FINO */
+
+.logout-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* FAVORITOS: CONTORNO FINO */
+
+.favorite-icon {
+  fill: none;
+  stroke: var(--mariflex-primary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* CARRINHO: CONTORNO FINO */
+
+.cart-icon {
+  fill: none;
+  stroke: var(--mariflex-primary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.header-action:hover .header-icon {
+  color: var(--mariflex-primary-dark);
 }
 
 .header-action.cart b {
@@ -270,16 +311,22 @@ button {
   align-items: center;
   isolation: isolate;
   overflow: hidden;
-  background: #ffffff;
+  background: linear-gradient(
+    105deg,
+    #FFFFFF 0%,
+    #FFFCF9 25%,
+    #F8E9DE 55%,
+    #FFFFFF 100%
+  );
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  width: 42%;
-  max-width: 520px;
+  width: 44%;
+  max-width: 550px;
   margin-left: 7.4%;
-  padding: 42px 0;
+  padding: 48px 0;
   color: var(--mariflex-text);
 }
 
@@ -291,7 +338,15 @@ button {
 
 .hero-content h1 {
   margin: 0 0 17px;
-  color: var(--mariflex-primary);
+  background: linear-gradient(
+    105deg,
+    #792D32 5%,
+    #9B5550 55%,
+    #C99A78 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: clamp(46px, 5vw, 76px);
   line-height: 1.04;
   font-weight: 750;
@@ -312,15 +367,13 @@ button {
   gap: 20px;
 }
 
-/* IMAGEM PRINCIPAL */
+/* IMAGEM E DEGRADÊ DA SEÇÃO DE BOAS-VINDAS */
 
 .hero-image {
   position: absolute;
   z-index: 1;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 68%;
+  inset: 0;
+  width: 100%;
   overflow: hidden;
   background: var(--mariflex-surface);
 }
@@ -333,15 +386,20 @@ button {
   object-position: center;
 }
 
+/* DEGRADÊ CHAMPANHE INTEGRADO À FOTOGRAFIA */
+
 .hero-image::after {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
-    #ffffff 0%,
-    rgba(255, 255, 255, 0.94) 5%,
-    rgba(255, 255, 255, 0.55) 18%,
-    rgba(255, 255, 255, 0) 42%
+    #FFFFFF 0%,
+    rgba(255, 255, 255, 0.99) 22%,
+    rgba(255, 252, 249, 0.94) 34%,
+    rgba(255, 248, 243, 0.78) 43%,
+    rgba(248, 233, 222, 0.48) 55%,
+    rgba(255, 255, 255, 0.08) 72%,
+    transparent 100%
   );
   content: '';
   pointer-events: none;
@@ -417,10 +475,15 @@ button {
   padding: 22px 15px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  border: 1px solid var(--mariflex-border);
+  border: 1px solid var(--mariflex-champagne-line);
   border-radius: 16px;
-  background: white;
-  box-shadow: 0 4px 14px rgba(40, 25, 25, 0.08);
+  background: linear-gradient(
+    105deg,
+    #FFF9F4 0%,
+    #F7E7DC 48%,
+    #FFF9F4 100%
+  );
+  box-shadow: 0 5px 18px rgba(93, 32, 37, 0.07);
 }
 
 .benefit {
@@ -432,7 +495,7 @@ button {
 }
 
 .benefit + .benefit {
-  border-left: 1px solid var(--mariflex-border);
+  border-left: 1px solid rgba(201, 154, 120, 0.38);
 }
 
 .benefit-icon {
@@ -443,7 +506,7 @@ button {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #F5E9E9;
+  background: rgba(232, 198, 174, 0.34);
   color: var(--mariflex-primary);
   font-size: 24px;
 }
@@ -451,7 +514,7 @@ button {
 .benefit strong {
   display: block;
   margin-bottom: 6px;
-  color: var(--mariflex-text);
+  color: var(--mariflex-primary-dark);
   font-size: 14px;
 }
 
@@ -718,7 +781,7 @@ button {
   font-size: 13px;
 }
 
-/* RESPONSIVIDADE */
+/* TABLETS */
 
 @media (max-width: 1100px) {
   .header-main {
@@ -728,9 +791,13 @@ button {
     padding-left: 4%;
   }
 
-  .logo-text strong {
-    font-size: 20px;
-    letter-spacing: 2px;
+  .logo-symbol-image {
+    width: 56px;
+    height: 65px;
+  }
+
+  .logo-wordmark-image {
+    width: 120px;
   }
 
   .header-actions {
@@ -767,6 +834,8 @@ button {
   }
 }
 
+/* CELULARES E TELAS MENORES */
+
 @media (max-width: 760px) {
   .top-bar {
     justify-content: center;
@@ -784,19 +853,13 @@ button {
     padding: 16px 5%;
   }
 
-  .logo-symbol {
+  .logo-symbol-image {
     width: 43px;
-    height: 43px;
-    font-size: 33px;
+    height: 52px;
   }
 
-  .logo-text strong {
-    font-size: 19px;
-  }
-
-  .logo-text span {
-    font-size: 8px;
-    letter-spacing: 3px;
+  .logo-wordmark-image {
+    width: 112px;
   }
 
   .search {
@@ -813,8 +876,9 @@ button {
     min-width: 38px;
   }
 
-  .header-action > span {
-    font-size: 21px;
+  .header-icon {
+    width: 22px;
+    height: 22px;
   }
 
   .header-action small {
@@ -835,6 +899,7 @@ button {
   .hero {
     min-height: 500px;
     align-items: flex-start;
+    background: #FFFFFF;
   }
 
   .hero-content {
@@ -854,16 +919,18 @@ button {
   }
 
   .hero-image {
-    top: 215px;
+    top: 0;
     width: 100%;
   }
 
   .hero-image::after {
     background: linear-gradient(
       180deg,
-      #ffffff 0%,
-      rgba(255, 255, 255, 0.25) 28%,
-      transparent 65%
+      #FFFFFF 0%,
+      rgba(255, 255, 255, 0.97) 27%,
+      rgba(255, 248, 243, 0.65) 43%,
+      rgba(255, 255, 255, 0.12) 65%,
+      transparent 100%
     );
   }
 
@@ -938,9 +1005,16 @@ button {
   }
 }
 
+/* CELULARES PEQUENOS */
+
 @media (max-width: 390px) {
-  .logo-text strong {
-    font-size: 16px;
+  .logo-symbol-image {
+    width: 38px;
+    height: 46px;
+  }
+
+  .logo-wordmark-image {
+    width: 96px;
   }
 
   .header-actions {
@@ -969,7 +1043,7 @@ button {
 
   .benefit + .benefit {
     padding-top: 15px;
-    border-top: 1px solid var(--mariflex-border);
+    border-top: 1px solid var(--mariflex-champagne-line);
     border-left: none;
   }
 
@@ -984,5 +1058,44 @@ button {
 
   .category-card img {
     height: 90px;
+  }
+}
+
+/* AJUSTE DEFINITIVO DO TAMANHO DO SÍMBOLO DA LOGO */
+
+.header-main .logo .logo-symbol-image {
+  width: 65px !important;
+  height: 75px !important;
+  object-fit: contain;
+  transform: scale(1.5);
+  transform-origin: center;
+  flex-shrink: 0;
+}
+
+/* O nome permanece no tamanho original */
+.header-main .logo .logo-wordmark-image {
+  width: 142px !important;
+  height: auto;
+}
+
+/* TABLETS */
+@media (max-width: 1100px) {
+  .header-main .logo .logo-symbol-image {
+    width: 56px !important;
+    height: 65px !important;
+    transform: scale(1.4);
+  }
+}
+
+/* CELULARES */
+@media (max-width: 760px) {
+  .header-main .logo .logo-symbol-image {
+    width: 43px !important;
+    height: 52px !important;
+    transform: scale(1.3);
+  }
+
+  .header-main .logo .logo-wordmark-image {
+    width: 112px !important;
   }
 }

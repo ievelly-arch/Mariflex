@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './Home.css'
@@ -25,20 +24,16 @@ function Home() {
     }
 
     window.addEventListener('storage', atualizarUsuario)
-
-    return () => {
-      window.removeEventListener('storage', atualizarUsuario)
-    }
+    return () => window.removeEventListener('storage', atualizarUsuario)
   }, [])
 
   function buscarProdutos() {
     const termo = termoBusca.trim()
-
-    if (termo) {
-      navigate(`/catalogo?busca=${encodeURIComponent(termo)}`)
-    } else {
-      navigate('/catalogo')
-    }
+    navigate(
+      termo
+        ? `/catalogo?busca=${encodeURIComponent(termo)}`
+        : '/catalogo'
+    )
   }
 
   function sair() {
@@ -49,32 +44,33 @@ function Home() {
 
   return (
     <main className="home">
-      {/* BARRA SUPERIOR */}
+
       <div className="top-bar">
         <span>
           🚚 Frete grátis para todo o RN em compras acima de R$ 500,00!
         </span>
-
         <div>
           <span>☏ Atendimento: (84) 99999-9999</span>
           <span>◷ Seg a Sex: 08h às 18h</span>
         </div>
       </div>
 
-      {/* CABEÇALHO */}
       <header className="header">
         <div className="header-main">
-          {/* LOGO */}
-          <Link to="/" className="logo">
-            <div className="logo-symbol">M</div>
 
-            <div className="logo-text">
-              <strong>MARIFLEX</strong>
-              <span>MÓVEIS</span>
-            </div>
+          <Link to="/" className="logo" aria-label="Mariflex Móveis & Casa - Início">
+            <img
+              className="logo-symbol-image"
+              src="/mariflex-simbolo-vinho.png"
+              alt=""
+            />
+            <img
+              className="logo-wordmark-image"
+              src="/mariflex-nome-vinho.png"
+              alt="Mariflex Móveis & Casa"
+            />
           </Link>
 
-          {/* BUSCA */}
           <div className="search">
             <input
               type="text"
@@ -83,91 +79,86 @@ function Home() {
               value={termoBusca}
               onChange={(e) => setTermoBusca(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  buscarProdutos()
-                }
+                if (e.key === 'Enter') buscarProdutos()
               }}
             />
 
-            <button
-              type="button"
-              aria-label="Buscar"
-              onClick={buscarProdutos}
-            >
-              🔍
+            <button type="button" aria-label="Buscar" onClick={buscarProdutos}>
+              <svg className="header-icon search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M15.2 15.2L21 21" />
+              </svg>
             </button>
           </div>
 
-          {/* AÇÕES */}
           <div className="header-actions">
+
             {usuario ? (
               <>
                 <Link
                   to={usuario.tipo === 'cliente' ? '/perfil' : '/funcionario'}
                   className="header-action"
                 >
-                  <span>♙</span>
+                  <svg className="header-icon profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="7.5" r="4" />
+                    <path d="M4 21c.4-4.5 3.4-7 8-7s7.6 2.5 8 7Z" />
+                  </svg>
                   <small>
-                    {usuario.tipo === 'funcionario'
-                      ? 'Área funcionário'
-                      : 'Meu perfil'}
+                    {usuario.tipo === 'funcionario' ? 'Área funcionário' : 'Meu perfil'}
                   </small>
                 </Link>
 
-                <button
-                  type="button"
-                  className="header-action"
-                  onClick={sair}
-                >
-                  <span>↪</span>
+                <button type="button" className="header-action" onClick={sair}>
+                  <svg className="header-icon logout-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 4H5.8A1.8 1.8 0 0 0 4 5.8v12.4A1.8 1.8 0 0 0 5.8 20H10" />
+                    <path d="M13 8l4 4-4 4M8 12h9" />
+                  </svg>
                   <small>Sair</small>
                 </button>
               </>
             ) : (
               <Link to="/login" className="header-action">
-                <span>♙</span>
+                <svg className="header-icon profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="7.5" r="4" />
+                  <path d="M4 21c.4-4.5 3.4-7 8-7s7.6 2.5 8 7Z" />
+                </svg>
                 <small>Entrar</small>
               </Link>
             )}
 
-            <button type="button" className="header-action">
-              <span>♡</span>
+            <button type="button" className="header-action" aria-label="Favoritos">
+              <svg className="header-icon favorite-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.8 8.7c0 4.2-8.8 10.1-8.8 10.1S3.2 12.9 3.2 8.7A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.8 2.3Z" />
+              </svg>
               <small>Favoritos</small>
             </button>
 
-            <Link to="/carrinho" className="header-action cart">
-              <span>🛒</span>
+            <Link to="/carrinho" className="header-action cart" aria-label="Carrinho">
+              <svg className="header-icon cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2.5 3.5h2.2l2.5 12.1a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 1.9-1.5L21.5 8H6" />
+                <circle cx="9" cy="20" r="1.7" />
+                <circle cx="18" cy="20" r="1.7" />
+              </svg>
               <b>0</b>
               <small>Carrinho</small>
             </Link>
+
           </div>
         </div>
 
-        {/* MENU */}
         <nav className="navigation">
-          <Link to="/" className="active">
-            Início
-          </Link>
-
+          <Link to="/" className="active">Início</Link>
           <Link to="/catalogo">Catálogo</Link>
-
-          <a href="#categorias">
-            Categorias <span>⌄</span>
-          </a>
-
+          <a href="#categorias">Categorias <span>⌄</span></a>
           <a href="#promocoes">Promoções</a>
-
           <a href="#pagamento">Formas de Pagamento</a>
-
           <a href="#contato">Contato</a>
         </nav>
       </header>
 
-      {/* DESTAQUE PRINCIPAL */}
       <section className="hero">
         <div className="hero-content">
           <span className="hero-small">Bem-vindo à</span>
-
           <h1>Mariflex</h1>
 
           <p>
@@ -179,7 +170,6 @@ function Home() {
             <Link to="/catalogo" className="primary-button">
               Ver Catálogo <span>→</span>
             </Link>
-
             <a href="#sobre" className="secondary-button">
               Saiba mais sobre nós
             </a>
@@ -203,7 +193,6 @@ function Home() {
         </div>
       </section>
 
-      {/* BENEFÍCIOS */}
       <section className="benefits">
         <div className="benefit">
           <div className="benefit-icon">🚚</div>
@@ -238,7 +227,6 @@ function Home() {
         </div>
       </section>
 
-      {/* CATEGORIAS */}
       <section className="categories" id="categorias">
         <div className="section-heading">
           <span>Explore nossos produtos</span>
@@ -252,11 +240,7 @@ function Home() {
               <h3>Sofás</h3>
               <span>Ver produtos →</span>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=700&q=80"
-              alt="Sofá para sala de estar"
-              loading="lazy"
-            />
+            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=700&q=80" alt="Sofá para sala de estar" />
           </a>
 
           <a href="/catalogo" className="category-card">
@@ -265,11 +249,7 @@ function Home() {
               <h3>Quartos</h3>
               <span>Ver produtos →</span>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80"
-              alt="Ambiente de quarto decorado"
-              loading="lazy"
-            />
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Ambiente de quarto decorado" />
           </a>
 
           <a href="/catalogo" className="category-card">
@@ -278,11 +258,7 @@ function Home() {
               <h3>Guarda-Roupas</h3>
               <span>Ver produtos →</span>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=700&q=80"
-              alt="Móveis para organização do quarto"
-              loading="lazy"
-            />
+            <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=700&q=80" alt="Móveis para organização do quarto" />
           </a>
 
           <a href="/catalogo" className="category-card">
@@ -291,11 +267,7 @@ function Home() {
               <h3>Salas de Jantar</h3>
               <span>Ver produtos →</span>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=700&q=80"
-              alt="Mesa e cadeiras para sala de jantar"
-              loading="lazy"
-            />
+            <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=700&q=80" alt="Mesa e cadeiras para sala de jantar" />
           </a>
 
           <a href="/catalogo" className="category-card">
@@ -304,11 +276,7 @@ function Home() {
               <h3>Racks e Painéis</h3>
               <span>Ver produtos →</span>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=700&q=80"
-              alt="Painel para televisão na sala"
-              loading="lazy"
-            />
+            <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=700&q=80" alt="Painel para televisão na sala" />
           </a>
         </div>
 
@@ -317,7 +285,6 @@ function Home() {
         </Link>
       </section>
 
-      {/* SOBRE */}
       <section className="about" id="sobre">
         <div className="about-content">
           <span className="section-label">SOBRE A MARIFLEX</span>
@@ -347,7 +314,6 @@ function Home() {
         </div>
       </section>
 
-      {/* CHAMADA PARA O CATÁLOGO */}
       <section className="final-cta" id="promocoes">
         <div>
           <span>ENCONTRE SEU PRÓXIMO MÓVEL</span>
@@ -363,7 +329,6 @@ function Home() {
         </Link>
       </section>
 
-      {/* RODAPÉ */}
       <footer className="footer" id="contato">
         <div className="footer-brand">
           <div className="footer-logo">
@@ -388,6 +353,7 @@ function Home() {
           <span>◎ &nbsp; ● &nbsp; ◉</span>
         </div>
       </footer>
+
     </main>
   )
 }
