@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Carrinho.css'
@@ -120,7 +119,9 @@ function Carrinho() {
           item.quantidade <= 0
       )
     ) {
-      setMensagem('Há produtos inválidos no carrinho. Remova-os e adicione-os novamente.')
+      setMensagem(
+        'Há produtos inválidos no carrinho. Remova-os e adicione-os novamente.'
+      )
       return
     }
 
@@ -129,17 +130,17 @@ function Carrinho() {
 
     try {
       const resposta = await fetch(`${API_URL}/pedidos`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${usuario.token}`,
-  },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${usuario.token}`,
+        },
         body: JSON.stringify({
-  pagamento,
-  remetente: remetente.trim(),
-  destinatario: destinatario.trim(),
-  itens: itensPedido,
-}),
+          pagamento,
+          remetente: remetente.trim(),
+          destinatario: destinatario.trim(),
+          itens: itensPedido,
+        }),
       })
 
       const dados = await resposta.json().catch(() => ({}))
@@ -169,12 +170,20 @@ function Carrinho() {
   return (
     <main className="carrinho-page">
       <header className="carrinho-header">
-        <Link to="/" className="carrinho-logo">
-          <span className="carrinho-logo-m">M</span>
-          <span>MARIFLEX</span>
+        <Link to="/" className="carrinho-logo" aria-label="Mariflex - página inicial">
+          <img
+            src="/mariflex-simbolo-branco.png"
+            alt=""
+            className="carrinho-logo-simbolo"
+          />
+          <img
+            src="/mariflex-texto-branco.png"
+            alt="Mariflex Móveis & Casa"
+            className="carrinho-logo-texto"
+          />
         </Link>
 
-        <nav className="carrinho-nav">
+        <nav className="carrinho-nav" aria-label="Navegação principal">
           <Link to="/">Início</Link>
           <Link to="/catalogo">Continuar comprando</Link>
         </nav>
@@ -207,8 +216,7 @@ function Carrinho() {
               <div className="carrinho-lista-titulo">
                 <h2>Produtos escolhidos</h2>
                 <span>
-                  {quantidadeTotal}{' '}
-                  {quantidadeTotal === 1 ? 'item' : 'itens'}
+                  {quantidadeTotal} {quantidadeTotal === 1 ? 'item' : 'itens'}
                 </span>
               </div>
 
@@ -222,16 +230,16 @@ function Carrinho() {
 
                   <div className="carrinho-item-detalhes">
                     <h3>{item.nome}</h3>
-                    <p>{item.categoria}</p>
+                    {item.categoria && <p>{item.categoria}</p>}
+
                     {item.variacoes &&
-  Object.entries(item.variacoes).map(([tipo, valor]) => (
-    <p key={tipo}>
-      <strong>{tipo}:</strong> {valor}
-    </p>
-  ))}
+                      Object.entries(item.variacoes).map(([tipo, valor]) => (
+                        <p key={tipo}>
+                          <strong>{tipo}:</strong> {valor}
+                        </p>
+                      ))}
+
                     <strong>{formatarPreco(item.preco)}</strong>
-
-
 
                     <div className="carrinho-quantidade">
                       <span>Quantidade:</span>
@@ -318,35 +326,47 @@ function Carrinho() {
               </fieldset>
 
               <div className="carrinho-dados-entrega">
-                <h3>Dados do pedido</h3>
+                <div className="carrinho-dados-cabecalho">
+                  <span className="carrinho-dados-icone" aria-hidden="true">
+                    ✦
+                  </span>
+                  <div>
+                    <h3>Dados do pedido</h3>
+                    <p>Identifique quem envia e quem recebe.</p>
+                  </div>
+                </div>
 
-                <label htmlFor="remetente">Remetente</label>
-                <input
-                  id="remetente"
-                  type="text"
-                  value={remetente}
-                  onChange={(evento) => {
-                    setRemetente(evento.target.value)
-                    setMensagem('')
-                  }}
-                  placeholder="Nome do remetente"
-                  maxLength={100}
-                  disabled={carregando}
-                />
+                <div className="carrinho-campo">
+                  <label htmlFor="remetente">Nome do remetente</label>
+                  <input
+                    id="remetente"
+                    type="text"
+                    value={remetente}
+                    onChange={(evento) => {
+                      setRemetente(evento.target.value)
+                      setMensagem('')
+                    }}
+                    placeholder="Digite o nome do remetente"
+                    maxLength={100}
+                    disabled={carregando}
+                  />
+                </div>
 
-                <label htmlFor="destinatario">Destinatário</label>
-                <input
-                  id="destinatario"
-                  type="text"
-                  value={destinatario}
-                  onChange={(evento) => {
-                    setDestinatario(evento.target.value)
-                    setMensagem('')
-                  }}
-                  placeholder="Nome do destinatário"
-                  maxLength={100}
-                  disabled={carregando}
-                />
+                <div className="carrinho-campo">
+                  <label htmlFor="destinatario">Nome do destinatário</label>
+                  <input
+                    id="destinatario"
+                    type="text"
+                    value={destinatario}
+                    onChange={(evento) => {
+                      setDestinatario(evento.target.value)
+                      setMensagem('')
+                    }}
+                    placeholder="Digite o nome do destinatário"
+                    maxLength={100}
+                    disabled={carregando}
+                  />
+                </div>
               </div>
 
               {mensagem && (

@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import './Catalogo.css'
@@ -7,16 +6,11 @@ const API_URL = 'http://localhost:3000/produtos'
 const CHAVE_CARRINHO = 'mariflexCarrinho'
 
 const imagensPorCategoria = {
-  'Sala':
-    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=85',
-  'Quarto':
-    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=85',
-  'Guarda-Roupas':
-    'https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=900&q=85',
-  'Racks e Painéis':
-    'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=900&q=85',
-  'Sala de jantar':
-    'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=900&q=85',
+  Sala: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=85',
+  Quarto: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=85',
+  'Guarda-Roupas': 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=900&q=85',
+  'Racks e Painéis': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=900&q=85',
+  'Sala de jantar': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=900&q=85',
 }
 
 const imagemPadrao =
@@ -40,13 +34,13 @@ function lerCarrinho() {
 
 function Catalogo() {
   const [produtos, setProdutos] = useState([])
-const [carregando, setCarregando] = useState(true)
-const [erro, setErro] = useState('')
-const [searchParams] = useSearchParams()
-const [pesquisa, setPesquisa] = useState(
-  () => searchParams.get('busca') || '',
-)
-const [categoria, setCategoria] = useState('Todas')
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState('')
+  const [searchParams] = useSearchParams()
+  const [pesquisa, setPesquisa] = useState(
+    () => searchParams.get('busca') || '',
+  )
+  const [categoria, setCategoria] = useState('Todas')
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [carrinho, setCarrinho] = useState(lerCarrinho)
 
@@ -56,10 +50,7 @@ const [categoria, setCategoria] = useState('Todas')
     }
 
     window.addEventListener('storage', atualizarCarrinho)
-
-    return () => {
-      window.removeEventListener('storage', atualizarCarrinho)
-    }
+    return () => window.removeEventListener('storage', atualizarCarrinho)
   }, [])
 
   async function carregarProdutos() {
@@ -68,13 +59,9 @@ const [categoria, setCategoria] = useState('Todas')
 
     try {
       const resposta = await fetch(API_URL)
-
-      if (!resposta.ok) {
-        throw new Error(`Erro HTTP ${resposta.status}`)
-      }
+      if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`)
 
       const dados = await resposta.json()
-
       if (!Array.isArray(dados)) {
         throw new Error('A API não retornou uma lista de produtos.')
       }
@@ -82,7 +69,6 @@ const [categoria, setCategoria] = useState('Todas')
       setProdutos(
         dados.map((produto) => {
           const nome = produto.nome || produto.descricao || 'Produto'
-
           return {
             id: produto.idprodutos,
             nome,
@@ -118,14 +104,11 @@ const [categoria, setCategoria] = useState('Todas')
   const produtosFiltrados = useMemo(() => {
     return produtos.filter((produto) => {
       const termo = pesquisa.trim().toLowerCase()
-
       const correspondePesquisa =
         produto.nome.toLowerCase().includes(termo) ||
         produto.categoria.toLowerCase().includes(termo)
-
       const correspondeCategoria =
         categoria === 'Todas' || produto.categoria === categoria
-
       return correspondePesquisa && correspondeCategoria
     })
   }, [produtos, pesquisa, categoria])
@@ -137,7 +120,6 @@ const [categoria, setCategoria] = useState('Todas')
     )
 
     let novosItens
-
     if (itemExistente) {
       novosItens = itensAtuais.map((item) =>
         String(item.id) === String(produto.id)
@@ -171,9 +153,17 @@ const [categoria, setCategoria] = useState('Todas')
   return (
     <main className="catalogo-page">
       <header className="catalogo-header">
-        <Link to="/" className="catalogo-logo">
-          <span className="catalogo-logo-m">M</span>
-          <span>MARIFLEX</span>
+        <Link to="/" className="catalogo-logo" aria-label="Mariflex - início">
+          <img
+            className="catalogo-logo-simbolo"
+            src="/mariflex-simbolo-vinho.png"
+            alt=""
+          />
+          <img
+            className="catalogo-logo-nome"
+            src="/mariflex-nome-vinho.png"
+            alt="Mariflex Móveis e Casa"
+          />
         </Link>
 
         <nav className="catalogo-nav">
@@ -189,12 +179,21 @@ const [categoria, setCategoria] = useState('Todas')
       </header>
 
       <section className="catalogo-banner">
-        <p className="catalogo-eyebrow">SEU LAR, SEU ESTILO</p>
-        <h1>Encontre seus novos favoritos</h1>
-        <p>
-          Móveis que combinam conforto, beleza e praticidade para transformar
-          seus ambientes.
-        </p>
+        <div className="catalogo-banner-conteudo">
+          <p className="catalogo-eyebrow">MARIFLEX MÓVEIS & CASA</p>
+          <h1>Seu lar merece ser especial.</h1>
+          <p>
+            Encontre móveis que unem conforto, beleza e praticidade para deixar
+            cada ambiente com a sua personalidade.
+          </p>
+          <a href="#produtos" className="catalogo-banner-link">
+            Explorar produtos <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div className="catalogo-banner-detalhe" aria-hidden="true">
+          <span>SEU LAR</span>
+          <strong>Seu estilo.</strong>
+        </div>
       </section>
 
       <section className="catalogo-conteudo" id="produtos">
@@ -269,7 +268,6 @@ const [categoria, setCategoria] = useState('Todas')
                           evento.currentTarget.src = imagemPadrao
                         }}
                       />
-
                       <span className="produto-categoria">
                         {produto.categoria}
                       </span>
@@ -280,15 +278,13 @@ const [categoria, setCategoria] = useState('Todas')
                       <p className="produto-preco">
                         {formatarPreco(produto.preco)}
                       </p>
-
                       <div className="produto-acoes">
                         <Link
-  to={`/produto/${produto.id}`}
-  className="produto-btn-detalhes"
->
-  Ver detalhes
-</Link>
-
+                          to={`/produto/${produto.id}`}
+                          className="produto-btn-detalhes"
+                        >
+                          Ver detalhes
+                        </Link>
                         <button
                           type="button"
                           className="produto-btn-adicionar"
@@ -308,7 +304,6 @@ const [categoria, setCategoria] = useState('Todas')
                 <p>
                   Tente outro nome ou selecione uma categoria diferente.
                 </p>
-
                 <button
                   type="button"
                   onClick={() => {
@@ -344,7 +339,6 @@ const [categoria, setCategoria] = useState('Todas')
             >
               ×
             </button>
-
             <img
               src={produtoSelecionado.imagem}
               alt={produtoSelecionado.nome}
@@ -353,20 +347,13 @@ const [categoria, setCategoria] = useState('Todas')
                 evento.currentTarget.src = imagemPadrao
               }}
             />
-
             <div className="produto-modal-info">
               <p className="catalogo-eyebrow">
                 {produtoSelecionado.categoria}
               </p>
-
-              <h2 id="produto-modal-titulo">
-                {produtoSelecionado.nome}
-              </h2>
-
+              <h2 id="produto-modal-titulo">{produtoSelecionado.nome}</h2>
               <p>{produtoSelecionado.descricao}</p>
-
               <strong>{formatarPreco(produtoSelecionado.preco)}</strong>
-
               <button
                 type="button"
                 className="produto-modal-adicionar"

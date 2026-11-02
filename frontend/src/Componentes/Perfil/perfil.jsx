@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import './Perfil.css'
+import './perfil.css'
 
 const API_URL = 'http://localhost:3000'
 const CHAVE_USUARIO = 'mariflexUsuario'
@@ -42,12 +42,10 @@ function Perfil() {
   const [carregando, setCarregando] = useState(true)
   const [mensagem, setMensagem] = useState('')
 
-
-function sairDaConta() {
-  localStorage.removeItem(CHAVE_USUARIO)
-  window.location.href = '/login'
-}
-
+  function sairDaConta() {
+    localStorage.removeItem(CHAVE_USUARIO)
+    window.location.href = '/login'
+  }
 
   useEffect(() => {
     async function carregarPerfil() {
@@ -66,18 +64,17 @@ function sairDaConta() {
       }
 
       try {
-        
-const resposta = await fetch(
-  `${API_URL}/users/perfil/${encodeURIComponent(usuario.cpf)}`,
-  {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${usuario.token}`,
-    },
-  }
-)
+        const resposta = await fetch(
+          `${API_URL}/users/perfil/${encodeURIComponent(usuario.cpf)}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${usuario.token}`,
+            },
+          }
+        )
 
-        const dados = await resposta.json()
+        const dados = await resposta.json().catch(() => ({}))
 
         if (!resposta.ok) {
           throw new Error(
@@ -103,22 +100,27 @@ const resposta = await fetch(
   return (
     <main className="perfil-page">
       <header className="perfil-header">
-        <Link to="/" className="perfil-logo">
-          <span className="perfil-logo-m">M</span>
-          <span>MARIFLEX</span>
+        <Link to="/" className="perfil-logo" aria-label="Mariflex - página inicial">
+          <img
+            src="/mariflex-simbolo-branco.png"
+            alt=""
+            className="perfil-logo-simbolo"
+          />
+          <img
+            src="/mariflex-texto-branco.png"
+            alt="Mariflex Móveis & Casa"
+            className="perfil-logo-texto"
+          />
         </Link>
 
-        
-<nav className="perfil-nav">
-  <Link to="/">Início</Link>
-  <Link to="/catalogo">Catálogo</Link>
-  <Link to="/carrinho">Carrinho</Link>
-
-  <button type="button" onClick={sairDaConta}>
-    Sair da conta
-  </button>
-</nav>
-
+        <nav className="perfil-nav" aria-label="Navegação principal">
+          <Link to="/">Início</Link>
+          <Link to="/catalogo">Catálogo</Link>
+          <Link to="/carrinho">Carrinho</Link>
+          <button type="button" className="perfil-sair" onClick={sairDaConta}>
+            Sair da conta
+          </button>
+        </nav>
       </header>
 
       <section className="perfil-conteudo">
@@ -141,12 +143,12 @@ const resposta = await fetch(
               </Link>
             )}
           </div>
-        ) : (
+        ) : cliente ? (
           <>
             <section className="perfil-card">
               <div className="perfil-card-titulo">
                 <div className="perfil-avatar" aria-hidden="true">
-                  {cliente.nome.charAt(0).toUpperCase()}
+                  {(cliente.nome || 'M').charAt(0).toUpperCase()}
                 </div>
 
                 <div>
@@ -237,7 +239,7 @@ const resposta = await fetch(
                       </div>
 
                       <div className="perfil-pedido-itens">
-                        {pedido.itens.map((item, indice) => (
+                        {(pedido.itens || []).map((item, indice) => (
                           <div
                             className="perfil-pedido-item"
                             key={`${pedido.idpedido}-${indice}`}
@@ -248,9 +250,7 @@ const resposta = await fetch(
                                 alt={item.produto.nome || 'Produto'}
                               />
                             ) : (
-                              <div className="perfil-imagem-vazia">
-                                M
-                              </div>
+                              <div className="perfil-imagem-vazia">M</div>
                             )}
 
                             <div>
@@ -259,14 +259,12 @@ const resposta = await fetch(
                                   item.produto?.descricao ||
                                   'Produto indisponível'}
                               </strong>
-                              <span>
-                                Quantidade: {item.quantidade}
-                              </span>
+                              <span>Quantidade: {item.quantidade}</span>
                             </div>
 
                             <strong>
                               {formatarPreco(
-                                item.preco * item.quantidade
+                                Number(item.preco) * Number(item.quantidade)
                               )}
                             </strong>
                           </div>
@@ -278,6 +276,10 @@ const resposta = await fetch(
               )}
             </section>
           </>
+        ) : (
+          <div className="perfil-aviso" role="alert">
+            Não foi possível encontrar os dados do cliente.
+          </div>
         )}
       </section>
 

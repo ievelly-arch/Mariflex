@@ -1,4 +1,3 @@
-
 :root {
   --mariflex-primary: #792D32;
   --mariflex-primary-dark: #5D2025;
@@ -18,7 +17,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 120px;
+  scroll-padding-top: 150px;
 }
 
 body {
@@ -45,13 +44,21 @@ button {
 .home {
   width: 100%;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: clip;
   background: #FFFFFF;
+  padding-top: 34px;
 }
 
-/* BARRA SUPERIOR */
+/* =========================================
+   BARRA SUPERIOR FIXA
+========================================= */
 
 .top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 34px;
   min-height: 34px;
   padding: 8px 5.8%;
   display: flex;
@@ -61,6 +68,7 @@ button {
   background: var(--mariflex-primary-dark);
   color: white;
   font-size: 11px;
+  z-index: 1002;
 }
 
 .top-bar > div {
@@ -73,25 +81,46 @@ button {
   white-space: nowrap;
 }
 
-/* CABEÇALHO */
+/* =========================================
+   CABEÇALHO
+   SOMENTE A PARTE PRINCIPAL FICA FIXA
+========================================= */
 
 .header {
   position: relative;
   z-index: 5;
   background: white;
   border-bottom: 1px solid var(--mariflex-border);
+
+  /* Reserva o espaço do cabeçalho fixo */
+  padding-top: 116px;
 }
 
+/* Logo, pesquisa e ícones fixos */
+
 .header-main {
-  min-height: 98px;
+  position: fixed;
+  top: 34px;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+
+  height: 116px;
+  min-height: 116px;
   padding: 18px 5.8%;
+
   display: grid;
   grid-template-columns: 260px minmax(220px, 1fr) 260px;
   align-items: center;
   gap: 28px;
+
+  background: white;
+  border-bottom: 1px solid var(--mariflex-border);
 }
 
-/* LOGO */
+/* =========================================
+   LOGO
+========================================= */
 
 .logo {
   width: fit-content;
@@ -117,7 +146,9 @@ button {
   object-fit: contain;
 }
 
-/* PESQUISA */
+/* =========================================
+   PESQUISA
+========================================= */
 
 .search {
   height: 46px;
@@ -159,7 +190,9 @@ button {
   color: var(--mariflex-primary);
 }
 
-/* ÍCONES */
+/* =========================================
+   ÍCONES
+========================================= */
 
 .header-actions {
   display: flex;
@@ -198,8 +231,6 @@ button {
   color: var(--mariflex-primary);
 }
 
-/* PESQUISA: CONTORNO FINO */
-
 .search-icon {
   fill: none;
   stroke: var(--mariflex-primary);
@@ -207,15 +238,11 @@ button {
   stroke-linecap: round;
 }
 
-/* PERFIL: PREENCHIDO */
-
 .profile-icon circle,
 .profile-icon path {
   fill: var(--mariflex-primary);
   stroke: none;
 }
-
-/* SAIR: CONTORNO FINO */
 
 .logout-icon {
   fill: none;
@@ -225,8 +252,6 @@ button {
   stroke-linejoin: round;
 }
 
-/* FAVORITOS: CONTORNO FINO */
-
 .favorite-icon {
   fill: none;
   stroke: var(--mariflex-primary);
@@ -234,8 +259,6 @@ button {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-/* CARRINHO: CONTORNO FINO */
 
 .cart-icon {
   fill: none;
@@ -264,15 +287,20 @@ button {
   font-size: 10px;
 }
 
-/* MENU */
+/* =========================================
+   MENU DE NAVEGAÇÃO
+   NÃO FICA FIXO
+========================================= */
 
 .navigation {
+  position: relative;
   min-height: 44px;
   padding: 0 20px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 38px;
+  background: white;
 }
 
 .navigation a {
@@ -302,7 +330,9 @@ button {
   margin-left: 5px;
 }
 
-/* DESTAQUE PRINCIPAL */
+/* =========================================
+   DESTAQUE PRINCIPAL
+========================================= */
 
 .hero {
   position: relative;
@@ -367,8 +397,6 @@ button {
   gap: 20px;
 }
 
-/* IMAGEM E DEGRADÊ DA SEÇÃO DE BOAS-VINDAS */
-
 .hero-image {
   position: absolute;
   z-index: 1;
@@ -386,8 +414,6 @@ button {
   object-position: center;
 }
 
-/* DEGRADÊ CHAMPANHE INTEGRADO À FOTOGRAFIA */
-
 .hero-image::after {
   position: absolute;
   inset: 0;
@@ -404,8 +430,6 @@ button {
   content: '';
   pointer-events: none;
 }
-
-/* INDICADORES DA IMAGEM */
 
 .hero-dots {
   position: absolute;
@@ -429,7 +453,9 @@ button {
   background: var(--mariflex-primary);
 }
 
-/* BOTÕES */
+/* =========================================
+   BOTÕES
+========================================= */
 
 .primary-button {
   min-height: 48px;
@@ -463,7 +489,9 @@ button {
   color: var(--mariflex-primary);
 }
 
-/* BENEFÍCIOS */
+/* =========================================
+   BENEFÍCIOS
+========================================= */
 
 .benefits {
   position: relative;
@@ -525,7 +553,9 @@ button {
   line-height: 1.6;
 }
 
-/* CATEGORIAS */
+/* =========================================
+   CATEGORIAS
+========================================= */
 
 .categories {
   padding: 30px 7.4% 20px;
@@ -637,7 +667,9 @@ button {
   background: var(--mariflex-primary-dark);
 }
 
-/* SOBRE A MARIFLEX */
+/* =========================================
+   SOBRE A MARIFLEX
+========================================= */
 
 .about {
   padding: 70px 7.4%;
@@ -698,7 +730,9 @@ button {
   line-height: 1.3;
 }
 
-/* CHAMADA PARA O CATÁLOGO */
+/* =========================================
+   CHAMADA PARA O CATÁLOGO
+========================================= */
 
 .final-cta {
   padding: 48px 7.4%;
@@ -730,7 +764,9 @@ button {
   line-height: 1.7;
 }
 
-/* RODAPÉ */
+/* =========================================
+   RODAPÉ
+========================================= */
 
 .footer {
   padding: 28px 7.4%;
@@ -781,9 +817,15 @@ button {
   font-size: 13px;
 }
 
-/* TABLETS */
+/* =========================================
+   TABLETS
+========================================= */
 
 @media (max-width: 1100px) {
+  .header {
+    padding-top: 116px;
+  }
+
   .header-main {
     grid-template-columns: 220px minmax(180px, 1fr) 220px;
     gap: 16px;
@@ -834,9 +876,15 @@ button {
   }
 }
 
-/* CELULARES E TELAS MENORES */
+/* =========================================
+   CELULARES E TELAS MENORES
+========================================= */
 
 @media (max-width: 760px) {
+  .home {
+    padding-top: 34px;
+  }
+
   .top-bar {
     justify-content: center;
     text-align: center;
@@ -847,7 +895,18 @@ button {
     display: none;
   }
 
+  /* Cabeçalho fixo com duas linhas:
+     logo/ícones e pesquisa */
+
+  .header {
+    padding-top: 160px;
+  }
+
   .header-main {
+    top: 34px;
+    height: 160px;
+    min-height: 160px;
+
     grid-template-columns: 1fr auto;
     gap: 15px;
     padding: 16px 5%;
@@ -885,7 +944,10 @@ button {
     font-size: 10px;
   }
 
+  /* O menu continua rolando normalmente */
+
   .navigation {
+    position: relative;
     justify-content: flex-start;
     gap: 23px;
     padding: 0 5% 10px;
@@ -895,6 +957,8 @@ button {
   .navigation a {
     font-size: 12px;
   }
+
+  /* DESTAQUE */
 
   .hero {
     min-height: 500px;
@@ -938,6 +1002,8 @@ button {
     bottom: 15px;
   }
 
+  /* BENEFÍCIOS */
+
   .benefits {
     width: 92%;
     margin-top: -15px;
@@ -956,6 +1022,8 @@ button {
   .benefit p {
     font-size: 11px;
   }
+
+  /* CATEGORIAS */
 
   .categories {
     padding: 30px 5%;
@@ -978,6 +1046,8 @@ button {
     height: 110px;
   }
 
+  /* SOBRE */
+
   .about {
     padding: 45px 6%;
     grid-template-columns: 1fr;
@@ -987,6 +1057,8 @@ button {
   .about-highlight {
     min-height: 220px;
   }
+
+  /* CHAMADA */
 
   .final-cta {
     padding: 40px 6%;
@@ -998,6 +1070,8 @@ button {
     font-size: 28px;
   }
 
+  /* RODAPÉ */
+
   .footer {
     padding: 30px 6%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1005,9 +1079,20 @@ button {
   }
 }
 
-/* CELULARES PEQUENOS */
+/* =========================================
+   CELULARES PEQUENOS
+========================================= */
 
 @media (max-width: 390px) {
+  .header {
+    padding-top: 160px;
+  }
+
+  .header-main {
+    height: 160px;
+    min-height: 160px;
+  }
+
   .logo-symbol-image {
     width: 38px;
     height: 46px;
@@ -1061,7 +1146,9 @@ button {
   }
 }
 
-/* AJUSTE DEFINITIVO DO TAMANHO DO SÍMBOLO DA LOGO */
+/* =========================================
+   AJUSTE DO TAMANHO DO SÍMBOLO DA LOGO
+========================================= */
 
 .header-main .logo .logo-symbol-image {
   width: 65px !important;
@@ -1073,12 +1160,14 @@ button {
 }
 
 /* O nome permanece no tamanho original */
+
 .header-main .logo .logo-wordmark-image {
   width: 142px !important;
   height: auto;
 }
 
 /* TABLETS */
+
 @media (max-width: 1100px) {
   .header-main .logo .logo-symbol-image {
     width: 56px !important;
@@ -1088,6 +1177,7 @@ button {
 }
 
 /* CELULARES */
+
 @media (max-width: 760px) {
   .header-main .logo .logo-symbol-image {
     width: 43px !important;
@@ -1098,4 +1188,10 @@ button {
   .header-main .logo .logo-wordmark-image {
     width: 112px !important;
   }
+}
+
+/* Remove somente a linha entre o cabeçalho e o menu */
+.header-main {
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
